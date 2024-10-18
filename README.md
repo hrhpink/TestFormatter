@@ -1,6 +1,7 @@
+# Test Formatter
 Description: This is a Test-Formatter :)
 
-Requirements:
+**Requirements:**
 
 The project file was generated using Visual Studio Enterprise 2022 version 17.11.5. 
 
@@ -8,7 +9,7 @@ It uses .NET version 8.0.
 
 You must install the ".NET Desktop Development" package for Visual Studio to successfully load the project.
 
-Steps to Install: 
+**Steps to Install:** 
 
 1.) Open Visual Studio Installer 
 
