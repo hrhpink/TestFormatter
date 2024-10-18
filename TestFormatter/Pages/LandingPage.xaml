@@ -10,5 +10,10 @@
 
     <StackPanel>
         <TextBlock Text="Welcome to Test Formatter!" FontSize="40" FontWeight="Bold" Margin="10"/>
+        <TextBlock Text="Please select an option below:" FontSize="20" Margin="10"/>
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Button Content="Create a new exam" Width="150" Margin="0 0 10 0"/>
+            <Button Content="Load previous exam" Width="150"/>
+        </StackPanel>
     </StackPanel>
 </Page>
