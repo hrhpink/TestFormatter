@@ -20,3 +20,5 @@ You must install the ".NET Desktop Development" package for Visual Studio to suc
 4.) Click "Modify" and wait for installation to complete
 
 The project was created using the Windows Presentation Foundation (WPF) framework.
+
+Delete
