@@ -24,5 +24,17 @@ namespace TestFormatter.Pages
         {
             InitializeComponent();
         }
+
+        private void CreateExam_Click(object sender, RoutedEventArgs e)
+        {
+            //this.NavigationService.Navigate(new Uri("/Pages/SamplePage.xaml", UriKind.Relative));
+            Window win2 = new Windows.SampleWindow();
+            win2.ShowDialog();
+        }
+
+        private void LoadExam_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new Uri("/Pages/SamplePage.xaml", UriKind.Relative));
+        }
     }
 }
