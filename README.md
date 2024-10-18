@@ -8,7 +8,9 @@ It uses .NET version 8.0.
 
 You must install the ".NET Desktop Development" package for Visual Studio to successfully load the project.
 
-Steps to Install: 1.) Open Visual Studio Installer 
+Steps to Install: 
+
+1.) Open Visual Studio Installer 
 
 2.) Select "Modify" on your current installation of Visual Studio 
 
