@@ -1,0 +1,15 @@
+﻿<Page x:Class="TestFormatter.Pages.FormatterPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:TestFormatter.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Test Formatter" Background="AliceBlue">
+
+    <StackPanel>
+        <!--Temporary button to navigate back-->
+        <Button Name="GoBack" Content="Back" Width="30" Click="GoBack_Click" Margin="10"/>
+    </StackPanel>
+</Page>
