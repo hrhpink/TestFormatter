@@ -7,13 +7,24 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LandingPage" Background="AliceBlue">
-
-    <StackPanel>
-        <TextBlock Text="Welcome to Test Formatter!" FontSize="40" FontWeight="Bold" Margin="10"/>
-        <TextBlock Text="Please select an option below:" FontSize="20" Margin="10"/>
-        <StackPanel Orientation="Horizontal" Margin="10">
-            <Button Name="CreateExam" Content="Create a new exam" Width="150" Margin="0 0 10 0" Click="CreateExam_Click"/>
-            <Button Name="LoadExam" Content="Load previous exam" Width="150" Click="LoadExam_Click"/>
+    <Grid>
+        <StackPanel VerticalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Rectangle Width="100" Height="100" Fill="Aqua"/>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Welcome to Test Formatter!" Margin ="10 0 0 0" FontSize="40" FontWeight="Bold"/>
+                    <TextBlock Text="An easy way to organize your exams-- without all the copy and paste!" Margin="10 0 0 0" FontSize="20"/>
+                </StackPanel>
+            </StackPanel>
+            <TextBlock Text="Authors: Daniel Alvarado Segura, Joshna Kurra, Natalie O'Leary, Tharanie Subramaniam" Margin="10 10 10 0" FontSize="12"/>
+            <TextBlock Text="Insert a longer paragraph about what the app does here. It will be sufficiently long. I am also writing a ton of text to&#10;demonstrate that you can use newline characters in XAML! All you have to do is type ampersand hashtag 10 &#10;semicolon and it will work out. I bet you didn't know I already used two of them. And you know what, here's another: &#10;Boom. There you go. Okay I feel like this is enough to write so I'm leaving it there. " FontSize="15" Margin="10"/>
+            <!--<TextBlock Text="Please select an option below:" FontSize="20" Margin="10"/>-->
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <Button Name="CreateExam" Content="Create a new exam" Width="220" FontSize ="25" Margin="0 0 10 0" Click="CreateExam_Click"/>
+                <Button Name="LoadExam" Content="Load previous exam" Width="230" FontSize="25" Click="LoadExam_Click"/>
+            </StackPanel>
+            <TextBlock Text="Copyright Notice: Blah blah blah" Margin="10"/>
         </StackPanel>
-    </StackPanel>
+    </Grid>
+
 </Page>
