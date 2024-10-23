@@ -7,9 +7,50 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Test Formatter" Background="AliceBlue">
+    <Grid>
+        <!--Auto adjusts element height to accommodate for arbitrary number of questions-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-    <StackPanel>
-        <!--Temporary button to navigate back-->
-        <Button Name="GoBack" Content="Back" Width="30" Click="GoBack_Click" Margin="10"/>
-    </StackPanel>
+        <!--Container for options + question selector windows-->
+        <DockPanel Grid.Row="0">
+            <!--Options panel-->
+            <Border BorderBrush="Black" BorderThickness="0 0 1 0">
+                <Expander ExpandDirection="Right" IsExpanded="True" Width="Auto">
+                    <StackPanel Background="White">
+                        <TextBlock Text="            Test Options            " FontSize="15"/>
+                        <TextBlock Text="Options"/>
+                    </StackPanel>
+                </Expander>
+            </Border>
+
+            <!--Questions panel-->
+            <ScrollViewer Width="Auto">
+
+                <StackPanel>
+                    <!--ADD QUESTIONS HERE-->
+                    <Button Content="Add Question"/>
+
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+
+        <!--Container for button bar-->
+        <Border BorderBrush="Black" BorderThickness="0 1 0 0" VerticalAlignment="Bottom">
+            <DockPanel VerticalAlignment="Bottom" Background="White" Grid.Row="1">
+                <!--Return to previous page-->
+                <Button Name="GoBack" Content="Back" Width="50" Click="GoBack_Click" Margin="10" HorizontalAlignment="Left"/>
+                <DockPanel HorizontalAlignment="Right">
+                    <!--Save exam and return to it later-->
+                    <Button Name="Save" Content="Save" Width="50" Click="Save_Click" Margin="10"/>
+                    <!--Export exam to prefered format-->
+                    <Button Name="Export" Content="Export" Width="50" Click="Export_Click" Margin="10"/>
+                </DockPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+
+
 </Page>

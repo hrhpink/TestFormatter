@@ -48,6 +48,7 @@ namespace TestFormatter.Pages
             {
                 string filepath = dialog.FileName;
                 //TODO: store name in a place that program can access at runtime so that it can display it
+                //OR do this in FileNameInput.xaml.cs
                 var fileStream = dialog.OpenFile();
                 using (StreamReader sr = new StreamReader(fileStream)) { 
                 //TODO: parse csv file
