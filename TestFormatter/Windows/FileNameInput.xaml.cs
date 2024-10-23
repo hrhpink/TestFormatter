@@ -33,7 +33,8 @@ namespace TestFormatter.Windows
             set { 
                 _fileName = value;
             }
-            //TODO: store file name somewhere.
+            //TODO: store file name somewhere so program can access it globally
+            //OR do this in LandingPage.xaml.cs
         }
 
         private void ConfirmName_Click(object sender, RoutedEventArgs e)

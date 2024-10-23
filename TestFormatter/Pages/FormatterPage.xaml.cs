@@ -30,5 +30,15 @@ namespace TestFormatter.Pages
         {
             this.NavigationService.GoBack();
         }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Export_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
