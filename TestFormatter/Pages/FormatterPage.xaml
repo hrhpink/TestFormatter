@@ -29,9 +29,9 @@
             <!--Questions panel-->
             <ScrollViewer Width="Auto">
 
-                <StackPanel>
+                <StackPanel Name="QuestionsPanel">
                     <!--ADD QUESTIONS HERE-->
-                    <Button Content="Add Question"/>
+                    <Button Name="AddQuestionButton" Content="Add Question" Click="AddQuestionButton_Click"/>
 
                 </StackPanel>
             </ScrollViewer>
