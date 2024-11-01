@@ -6,29 +6,29 @@
              xmlns:local="clr-namespace:TestFormatter.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
-    <StackPanel Background="LightGray" Margin="10">
+    <StackPanel Background="LightGray" Margin="20">
         <!--Question parameter row-->
-        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
 
             <!--Question Type-->
-            <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type" Margin="10 0 10 0" FontSize="12"/>
+            <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type:" Margin="10 0 10 0" FontSize="12" Width="90" VerticalAlignment="Center"/>
             <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged">
                 <ComboBoxItem Content="Free Response" />
                 <ComboBoxItem Content="Multiple Choice" />
             </ComboBox>
 
             <!--Question Number-->
-            <TextBlock x:Name="QuestionNumTextBlock" Text="Question Number" Margin="40 0 10 0" FontSize="12"/>
+            <TextBlock x:Name="QuestionNumTextBlock" Text="Question Number:" Margin="10 0 10 0" FontSize="12" VerticalAlignment="Center"/>
             <TextBox x:Name="QuestionNumTextBox" Width="40" Height="25" Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
 
             <!--Question Points-->
-            <TextBlock x:Name="PointsTextBlock" Text="Points" Margin="40 0 10 0" FontSize="12"/>
+            <TextBlock x:Name="PointsTextBlock" Text="Points:" Margin="10 0 10 0" FontSize="12" VerticalAlignment="Center"/>
             <TextBox x:Name="PointsTextBox" Width="40" Height="25" Text="{Binding Points, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
         </StackPanel>
         
         <!--Question Space-->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="0 0 10 0" FontSize="12"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="20 0 10 0" FontSize="12"  Width="90" VerticalAlignment="Center"/>
             <TextBox x:Name="QuestionTextBox" Width="400" Height="25" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
         </StackPanel>
 
