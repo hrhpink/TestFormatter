@@ -32,7 +32,6 @@
                 <StackPanel Name="QuestionsPanel">
                     <!--ADD QUESTIONS HERE-->
                     <Button Name="AddQuestionButton" Content="Add Question" Click="AddQuestionButton_Click"/>
-
                 </StackPanel>
             </ScrollViewer>
         </DockPanel>
