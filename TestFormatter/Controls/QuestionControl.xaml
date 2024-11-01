@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TestFormatter.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
-    <StackPanel Background="LightGray" Margin="20">
+    <StackPanel Background="LightGray">
         <!--Question parameter row-->
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
 
