@@ -37,8 +37,8 @@
         </DockPanel>
 
         <!--Container for button bar-->
-        <Border BorderBrush="Black" BorderThickness="0 1 0 0" VerticalAlignment="Bottom">
-            <DockPanel VerticalAlignment="Bottom" Background="White" Grid.Row="1">
+        <Border BorderBrush="Black" BorderThickness="0 1 0 0" VerticalAlignment="Bottom" Grid.Row="1">
+            <DockPanel VerticalAlignment="Bottom" Background="White">
                 <!--Return to previous page-->
                 <Button Name="GoBack" Content="Back" Width="50" Click="GoBack_Click" Margin="10" HorizontalAlignment="Left"/>
                 <DockPanel HorizontalAlignment="Right">

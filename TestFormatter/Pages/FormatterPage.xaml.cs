@@ -34,7 +34,7 @@ namespace TestFormatter.Pages
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
             // Create a new Question object and add it to the Exam
-            var newQuestion = new ShortAnswerQuestion();
+            var newQuestion = new FreeResponseQuestion();
 
             // Add the new Question to the Exam
             currentExam.AddQuestion(newQuestion);
@@ -45,7 +45,7 @@ namespace TestFormatter.Pages
                 Question = newQuestion
             };
 
-            // Add the new QuestionControl to the MainContainer
+            // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Add(questionControl);
         }
 
