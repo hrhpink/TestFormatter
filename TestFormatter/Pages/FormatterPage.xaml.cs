@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TestFormatter.Controls;
+using TestFormatter.Models;
 
 namespace TestFormatter.Pages
 {
@@ -20,9 +22,31 @@ namespace TestFormatter.Pages
     /// </summary>
     public partial class FormatterPage : Page
     {
+        //Initialization of Exam class to hold questions
+        private Exam currentExam = new Exam();
+
         public FormatterPage()
         {
             InitializeComponent();
+        }
+
+        //Add Questions code
+        private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Create a new Question object and add it to the Exam
+            var newQuestion = new FreeResponseQuestion();
+
+            // Add the new Question to the Exam
+            currentExam.AddQuestion(newQuestion);
+
+            // Create a new instance of QuestionControl and set its Question property
+            var questionControl = new QuestionControl
+            {
+                Question = newQuestion
+            };
+
+            // Add the new QuestionControl to the Question Panel
+            QuestionsPanel.Children.Add(questionControl);
         }
 
         //Go back to landing page
