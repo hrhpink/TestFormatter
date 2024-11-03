@@ -33,10 +33,8 @@ namespace TestFormatter.Pages
         //Add Questions code
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-            // Create a new Question object and add it to the Exam
+            // Create a new FreeResponseQuestion by default
             var newQuestion = new FreeResponseQuestion();
-
-            // Add the new Question to the Exam
             currentExam.AddQuestion(newQuestion);
 
             // Create a new instance of QuestionControl and set its Question property
@@ -45,8 +43,22 @@ namespace TestFormatter.Pages
                 Question = newQuestion
             };
 
+            // Subscribe to the QuestionTypeChanged event
+            questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
+
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Add(questionControl);
+        }
+
+        //Event to handle when question type changes
+        private void QuestionControl_QuestionTypeChanged(object sender, Question newQuestion)
+        {
+            // Update the existing question in the Exam class with the new question type
+            int index = currentExam.Questions.IndexOf(((QuestionControl)sender).Question);
+            if (index != -1)
+            {
+                currentExam.Questions[index] = newQuestion;
+            }
         }
 
         //Go back to landing page
