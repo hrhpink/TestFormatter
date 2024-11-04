@@ -6,23 +6,26 @@ using System.Threading.Tasks;
 
 namespace TestFormatter.Models
 {
-    public abstract class Question
+    public class Question
     {
         public string QuestionText { get; set; }
         public int Points { get; set; }
-        public abstract string Type { get; }
-        public int Number {  get; set; }
-        public int NumLines {  get; set; }
-    }
+        public int Number { get; set; }
+        public int NumLines { get; set; }
+        public string Type { get; set; }
+        public List<string> Options { get; set; } // Only used for Multiple Choice
 
-    public class FreeResponseQuestion : Question
-    {
-        public override string Type => "Free Response";
-    }
-
-    public class MultipleChoiceQuestion : Question
-    {
-        public override string Type => "Multiple Choice";
-        public List<string> Options { get; set; } = new List<string>();
+        public void SetType(string newType)
+        {
+            Type = newType;
+            if (newType == "Free Response")
+            {
+                Options = null; // Clear options for Free Response
+            }
+            else if (newType == "Multiple Choice")
+            {
+                Options = new List<string>(); // Initialize options for Multiple Choice
+            }
+        }
     }
 }
