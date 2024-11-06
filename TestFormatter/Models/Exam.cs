@@ -19,8 +19,8 @@ namespace TestFormatter.Models
         public bool IncludeSectionField { get; set; }
         public bool IncludeGradeField { get; set; }
 
-        public int IncludeNumberOfQuestionsField { get; set; }
-        public int IncludeNumberOfPointsField { get; set; }
+        public int QuestionLimit { get; set; } = 0; //Default limit (0 means no limit)
+        public int NumberOfPoints { get; set; }
 
         public void AddQuestion(Question question)
         {

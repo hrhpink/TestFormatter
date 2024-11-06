@@ -37,6 +37,16 @@ namespace TestFormatter.Pages
         //Add Questions code
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
+
+            if (currentExam.QuestionLimit > 0 && currentExam.Questions.Count >= currentExam.QuestionLimit)
+            {
+                MessageBox.Show($"You have reached the maximum number of questions ({currentExam.QuestionLimit}).",
+                                "Question Limit Reached",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return; // Exit without adding a new question
+            }
+
             // Create a new FreeResponseQuestion by default
             var newQuestion = new Question();
             currentExam.AddQuestion(newQuestion);

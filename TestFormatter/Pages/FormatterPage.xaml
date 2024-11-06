@@ -33,12 +33,12 @@
                         <!--" Number fields for each field option -->
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <TextBlock Text="Number of Questions:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                             <TextBox Text="{Binding NumberOfQuestionsField, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                            <TextBox Text="{Binding QuestionLimit, UpdateSourceTrigger=PropertyChanged}" Width="40" />
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <TextBlock Text="Total Points:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBox Text="{Binding NumberOfPointsField, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                            <TextBox Text="{Binding QuestionLimit, UpdateSourceTrigger=PropertyChanged}" Width="40" />
                         </StackPanel>
 
                     </StackPanel>
