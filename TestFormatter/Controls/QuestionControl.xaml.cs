@@ -76,16 +76,17 @@ namespace TestFormatter.Controls
 
                 // Update the AdditionalOptionsPanel based on the selected type
                 AdditionalOptionsPanel.Children.Clear();
+                AddOptionButton.Children.Clear();
                 if (selectedType == "Multiple Choice")
                 {
                     Button addOptionButton = new Button
                     {
-                        Content = "Add Option",
+                        Content = " Add Option ",
                         HorizontalAlignment = HorizontalAlignment.Center,
-                        Margin = new Thickness(5)
+                        Margin = new Thickness(5, 0, 5, 5)
                     };
                     addOptionButton.Click += AddOptionButton_Click;
-                    AdditionalOptionsPanel.Children.Add(addOptionButton);
+                    AddOptionButton.Children.Add(addOptionButton);
                 }
 
                 if (selectedType == "Free Response")
@@ -93,18 +94,23 @@ namespace TestFormatter.Controls
                     StackPanel linePanel = new StackPanel()
                     {
                         Orientation = Orientation.Horizontal,
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        Margin = new Thickness(5)
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 0, 5, 0)
                     };
                     TextBlock lineTextBlock = new TextBlock
                     {
-                        Text = "Input amount of space you want for answer in number of lines:"
+                        Text = "Input number of lines for answer space:",
+                        VerticalAlignment= VerticalAlignment.Center,
+                        Margin= new Thickness(5, 0, 0, 0)
+
                     };
                     TextBox lineTextBox = new TextBox
                     {
                         Width = 40,
                         Height = 25,
-                        Margin = new Thickness(5)
+                        Margin = new Thickness(5),
+                        VerticalContentAlignment = VerticalAlignment.Center
                     };
 
 
@@ -121,8 +127,8 @@ namespace TestFormatter.Controls
 
                     //Add Children to panel so they are displayed
                     AdditionalOptionsPanel.Children.Add(linePanel);
-                    AdditionalOptionsPanel.Children.Add(lineTextBlock);
-                    AdditionalOptionsPanel.Children.Add(lineTextBox);
+                    linePanel.Children.Add(lineTextBlock);
+                    linePanel.Children.Add(lineTextBox);
                 }
             }
         }
@@ -135,8 +141,8 @@ namespace TestFormatter.Controls
                 StackPanel optionPanel = new StackPanel
                 {
                     Orientation = Orientation.Horizontal,
-                    HorizontalAlignment = HorizontalAlignment.Center,
-                    Margin = new Thickness(5)
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(145, 5, 5, 5)
                 };
 
                 TextBox optionTextBox = new TextBox
