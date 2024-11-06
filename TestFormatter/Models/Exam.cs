@@ -12,6 +12,16 @@ namespace TestFormatter.Models
     {
         public List<Question> Questions { get; private set; } = new List<Question>();
 
+        public bool IncludeNameField { get; set; }
+        public bool IncludeIDField { get; set; }
+        public bool IncludeDateField { get; set; }
+        public bool IncludeClassField { get; set; }
+        public bool IncludeSectionField { get; set; }
+        public bool IncludeGradeField { get; set; }
+
+        public int QuestionLimit { get; set; } = 0; //Default limit (0 means no limit)
+        public int NumberOfPoints { get; set; }
+
         public void AddQuestion(Question question)
         {
             Questions.Add(question);

@@ -29,11 +29,24 @@ namespace TestFormatter.Pages
         public FormatterPage()
         {
             InitializeComponent();
+
+            //Set DataContext to bind the XAML to the currentExam object 
+            DataContext = currentExam; 
         }
 
         //Add Questions code
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
+
+            if (currentExam.QuestionLimit > 0 && currentExam.Questions.Count >= currentExam.QuestionLimit)
+            {
+                MessageBox.Show($"You have reached the maximum number of questions ({currentExam.QuestionLimit}).",
+                                "Question Limit Reached",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                return; // Exit without adding a new question
+            }
+
             // Create a new FreeResponseQuestion by default
             var newQuestion = new Question();
             currentExam.AddQuestion(newQuestion);
@@ -105,6 +118,11 @@ namespace TestFormatter.Pages
                 currentExam.ExportToTextFile(saveFileDialog.FileName);
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+        private void Checkbox_Changed(object sender, RoutedEventArgs e)
+        {
+            // Display current values of each property
+            MessageBox.Show($"Include Name: {currentExam.IncludeNameField}\n");
         }
     }
 }
