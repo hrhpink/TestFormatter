@@ -29,6 +29,9 @@ namespace TestFormatter.Pages
         public FormatterPage()
         {
             InitializeComponent();
+
+            //Set DataContext to bind the XAML to the currentExam object 
+            DataContext = currentExam; 
         }
 
         //Add Questions code
@@ -105,6 +108,11 @@ namespace TestFormatter.Pages
                 currentExam.ExportToTextFile(saveFileDialog.FileName);
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+        private void Checkbox_Changed(object sender, RoutedEventArgs e)
+        {
+            // Display current values of each property
+            MessageBox.Show($"Include Name: {currentExam.IncludeNameField}\n");
         }
     }
 }
