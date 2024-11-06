@@ -45,6 +45,17 @@ namespace TestFormatter.Models
                         validationMessage = $"Question {question.Number} is multiple choice but has no options.";
                         return false;
                     }
+                    else
+                    {
+                        foreach (var option in question.Options)
+                        {
+                            if(option == "")
+                            {
+                                validationMessage = $"Question {question.Number} is multiple choice but has empty options.";
+                                return false;
+                            }
+                        }
+                    }
                 }
                 else if (question.Type == "Free Response")
                 {
