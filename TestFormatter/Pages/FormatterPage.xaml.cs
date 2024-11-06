@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TestFormatter.Controls;
 using TestFormatter.Models;
+using Microsoft.Win32;
 
 namespace TestFormatter.Pages
 {
@@ -84,7 +85,26 @@ namespace TestFormatter.Pages
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
+            string validationMessage;
 
+            // Assuming 'exam' is an instance of your Exam class
+            if (!currentExam.ValidateQuestions(out validationMessage))
+            {
+                MessageBox.Show(validationMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text File (*.txt)|*.txt",
+                Title = "Save Exam Questions"
+            };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // Assuming 'exam' is an instance of your Exam class
+                currentExam.ExportToTextFile(saveFileDialog.FileName);
+                MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
     }
 }
