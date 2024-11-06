@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:TestFormatter.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
-    <StackPanel Background="LightGray" Margin="10">
+    <StackPanel Background="LightGray" Margin="10 10 10 0">
         <!--Question parameter row-->
         <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
 
             <!--Question Type-->
-            <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type:" Margin="10 0 10 0" FontSize="12" Width="90" VerticalAlignment="Center"/>
+            <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type:" Margin="10 0 10 0" Width="90" VerticalAlignment="Center"/>
             <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged">
                 <ComboBoxItem Content="Free Response" />
                 <ComboBoxItem Content="Multiple Choice" />
@@ -19,25 +19,24 @@
 
             <!--Question Number-->
             <TextBlock x:Name="QuestionNumTextBlock" Text="Question Number:" Margin="10 0 10 0" FontSize="12" VerticalAlignment="Center"/>
-            <TextBox x:Name="QuestionNumTextBox" Width="40" Height="25" Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+            <TextBox x:Name="QuestionNumTextBox" Width="40" Height="25" VerticalContentAlignment="Center" FontSize ="12" Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
 
             <!--Question Points-->
             <TextBlock x:Name="PointsTextBlock" Text="Points:" Margin="10 0 10 0" FontSize="12" VerticalAlignment="Center"/>
-            <TextBox x:Name="PointsTextBox" Width="40" Height="25" Text="{Binding Points, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+            <TextBox x:Name="PointsTextBox" Width="40" Height="25" VerticalContentAlignment="Center" FontSize ="12" Text="{Binding Points, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
         </StackPanel>
         
         <!--Question Space-->
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="20 0 10 0" FontSize="12"  Width="90" VerticalAlignment="Center"/>
-            <TextBox x:Name="QuestionTextBox" Width="400" Height="25" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+            <TextBox x:Name="QuestionTextBox" Width="372" Height="25" FontSize ="12" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
         </StackPanel>
 
         <!-- Content area that changes based on the selected question type -->
-        <StackPanel x:Name="AdditionalOptionsPanel" Margin="10" />
-
-        <DockPanel HorizontalAlignment="Center">
-            <Button x:Name="Delete" Content="Delete" Width="50" Click="DeleteButton_Click" Margin="10"/>
-        </DockPanel>
+        <StackPanel x:Name="AdditionalOptionsPanel" Margin="10 10 10 0" />
+        <StackPanel x:Name="AddOptionButton" Margin="10 0 10 10" />
+        
+        <Button x:Name="Delete" Content="Delete Question" Width="95" Click="DeleteButton_Click" Margin="10 0 10 20" HorizontalAlignment="Center"/>
 
     </StackPanel>
 </UserControl>

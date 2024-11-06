@@ -17,13 +17,13 @@
                 </StackPanel>
             </StackPanel>
             <TextBlock Text="Authors: Daniel Alvarado Segura, Joshna Kurra, Natalie O'Leary, Tharanie Subramaniam" Margin="10 10 10 0" FontSize="12"/>
-            <TextBlock Text="Insert a longer paragraph about what the app does here. It will be sufficiently long. I am also writing a ton of text to&#10;demonstrate that you can use newline characters in XAML! All you have to do is type ampersand hashtag 10 &#10;semicolon and it will work out. I bet you didn't know I already used two of them. And you know what, here's another: &#10;Boom. There you go. Okay I feel like this is enough to write so I'm leaving it there. " FontSize="15" Margin="10"/>
+            <TextBlock Text="Create a new exam: Start a new exam from scratch.&#10;Load previous exam: Continue working on a previous save file." FontSize="15" Margin="10"/>
             <!--<TextBlock Text="Please select an option below:" FontSize="20" Margin="10"/>-->
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
                 <Button Name="CreateExam" Content="Create a new exam" Width="220" FontSize ="25" Margin="0 0 10 0" Click="CreateExam_Click"/>
                 <Button Name="LoadExam" Content="Load previous exam" Width="230" FontSize="25" Click="LoadExam_Click"/>
             </StackPanel>
-            <TextBlock Text="Copyright Notice: Blah blah blah" Margin="10"/>
+            <!--<TextBlock Text="Copyright Notice: Blah blah blah" Margin="10"/>-->
         </StackPanel>
     </Grid>
 
