@@ -152,7 +152,7 @@ namespace TestFormatter.Controls
                 };
                 optionTextBox.LostFocus += (s, args) =>
                 {
-                    int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel) - 1;
+                    int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
                     if (index >= 0 && index < question.Options.Count)
                     {
                         question.Options[index] = optionTextBox.Text;
