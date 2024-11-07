@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.ComponentModel;
 
 
 namespace TestFormatter.Models
 {
-    public class Exam
+    public class Exam : INotifyPropertyChanged
     {
         public List<Question> Questions { get; private set; } = new List<Question>();
 
@@ -22,9 +23,12 @@ namespace TestFormatter.Models
         public int QuestionLimit { get; set; } = 0; //Default limit (0 means no limit)
         public int NumberOfPoints { get; set; }
 
+        public int QuestionCount => Questions.Count; // Property to track number of questions
+
         public void AddQuestion(Question question)
         {
             Questions.Add(question);
+
         }
 
         public bool ValidateQuestions(out string validationMessage)
@@ -96,7 +100,14 @@ namespace TestFormatter.Models
                     sb.AppendLine(new string('-', 40));  // Separator between questions
                 }
                 File.WriteAllText(filePath, sb.ToString());
-            }
+        }
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
     }
 }
