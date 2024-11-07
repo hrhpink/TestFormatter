@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Printing.IndexedProperties;
 
 
 namespace TestFormatter.Models
@@ -86,6 +87,45 @@ namespace TestFormatter.Models
             {
                 StringBuilder sb = new StringBuilder();
 
+                if (IncludeNameField == true)
+                {
+                    sb.AppendLine($"Name: _____________________________");
+                    sb.AppendLine("\n");
+                }
+                if (IncludeIDField == true)
+                {
+                    sb.AppendLine($"ID: ________________");
+                     sb.AppendLine("\n");
+                }
+                if (IncludeDateField == true)
+                {
+                    sb.AppendLine($"Date: __/__/____");
+                     sb.AppendLine("\n");
+                }
+                if (IncludeClassField == true)
+                {
+                    sb.AppendLine($"Class: ___________");
+                     sb.AppendLine("\n");
+                }
+                if (IncludeSectionField == true)
+                {
+                    sb.AppendLine($"Section: ___________");
+                     sb.AppendLine("\n");
+                }
+                if (IncludeGradeField == true)
+                {
+                    if (NumberOfPoints > 0)
+                    {
+                        sb.AppendLine($"Grade: ___/{NumberOfPoints}");
+                         sb.AppendLine("\n");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"Grade: ___/___");
+                         sb.AppendLine("\n");
+                    }
+                }
+
                 foreach (var question in Questions)
                 {
                     sb.AppendLine($"Question {question.Number}");
@@ -101,7 +141,7 @@ namespace TestFormatter.Models
                     {
                         for (int i = 0; i < question.NumLines; i++)
                         {
-                            sb.AppendLine("________");  // Placeholder line
+                            sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
                         }
                     }
                     sb.AppendLine(new string('-', 40));  // Separator between questions
