@@ -29,7 +29,12 @@ namespace TestFormatter.Models
         {
             Questions.Add(question);
             OnPropertyChanged(nameof(QuestionCount));
+        }
 
+        public void DeleteQuestion(Question question)
+        {
+            Questions.Remove(question);
+            OnPropertyChanged(nameof(QuestionCount));
         }
 
         public bool ValidateQuestions(out string validationMessage)

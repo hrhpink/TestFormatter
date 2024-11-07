@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using TestFormatter.Controls;
 using TestFormatter.Models;
 using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace TestFormatter.Pages
 {
@@ -26,7 +27,7 @@ namespace TestFormatter.Pages
         //Initialization of Exam class to hold questions
         private Exam currentExam = new Exam();
 
-        public FormatterPage()
+        public FormatterPage() 
         {
             InitializeComponent();
 
@@ -83,7 +84,7 @@ namespace TestFormatter.Pages
         private void QuestionControl_QuestionDeleted(object sender, Question deletedQuestion)
         {
             // Remove the question from currentExam
-            currentExam.Questions.Remove(deletedQuestion);
+            currentExam.DeleteQuestion(deletedQuestion);
         }
 
         //Go back to landing page
@@ -120,6 +121,13 @@ namespace TestFormatter.Pages
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-       
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
     }
 }
