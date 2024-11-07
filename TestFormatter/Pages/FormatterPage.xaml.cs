@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using TestFormatter.Controls;
 using TestFormatter.Models;
 using Microsoft.Win32;
+using System.ComponentModel;
 
 namespace TestFormatter.Pages
 {
@@ -26,12 +27,12 @@ namespace TestFormatter.Pages
         //Initialization of Exam class to hold questions
         private Exam currentExam = new Exam();
 
-        public FormatterPage()
+        public FormatterPage() 
         {
             InitializeComponent();
 
             //Set DataContext to bind the XAML to the currentExam object 
-            DataContext = currentExam; 
+            this.DataContext = currentExam; 
         }
 
         //Add Questions code
@@ -65,6 +66,7 @@ namespace TestFormatter.Pages
 
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
+
         }
 
         //Event to handle when question type changes
@@ -82,7 +84,7 @@ namespace TestFormatter.Pages
         private void QuestionControl_QuestionDeleted(object sender, Question deletedQuestion)
         {
             // Remove the question from currentExam
-            currentExam.Questions.Remove(deletedQuestion);
+            currentExam.DeleteQuestion(deletedQuestion);
         }
 
         //Go back to landing page
@@ -119,10 +121,13 @@ namespace TestFormatter.Pages
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-        private void Checkbox_Changed(object sender, RoutedEventArgs e)
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            // Display current values of each property
-            MessageBox.Show($"Include Name: {currentExam.IncludeNameField}\n");
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
     }
 }

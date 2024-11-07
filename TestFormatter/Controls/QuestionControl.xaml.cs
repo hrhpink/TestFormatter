@@ -7,7 +7,7 @@ using TestFormatter.Models;
 
 namespace TestFormatter.Controls
 {
-    public partial class QuestionControl : UserControl
+    public partial class QuestionControl : UserControl 
     {
         private Question question;
         public Question Question
