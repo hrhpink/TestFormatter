@@ -28,6 +28,7 @@ namespace TestFormatter.Models
         public void AddQuestion(Question question)
         {
             Questions.Add(question);
+            OnPropertyChanged(nameof(QuestionCount));
 
         }
 

@@ -66,9 +66,6 @@ namespace TestFormatter.Pages
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
 
-            // Reassign DataContext to refresh QuestionCount binding
-            DataContext = null;
-            DataContext = currentExam;
         }
 
         //Event to handle when question type changes
