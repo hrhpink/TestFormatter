@@ -13,7 +13,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-
+        
         <!--Container for options + question selector windows-->
         <DockPanel Grid.Row="0">
             <!--Options panel-->
@@ -38,7 +38,7 @@
 
                         <StackPanel Orientation="Horizontal" Margin="5">
                             <TextBlock Text="Total Points:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <TextBox Text="{Binding QuestionLimit, UpdateSourceTrigger=PropertyChanged}" Width="40" />
+                            <TextBox Text="{Binding NumberOfPoints, UpdateSourceTrigger=PropertyChanged}" Width="40" />
                         </StackPanel>
 
                     </StackPanel>
@@ -47,10 +47,11 @@
 
             <!--Questions panel-->
             <ScrollViewer Width="Auto">
-
                 <StackPanel Name="QuestionsPanel">
                     <!--ADD QUESTIONS HERE-->
                     <Button Name="AddQuestionButton" Content="Add Question" Click="AddQuestionButton_Click" Margin="10"/>
+                    <!-- Question Counter -->
+
                 </StackPanel>
             </ScrollViewer>
         </DockPanel>
@@ -60,13 +61,21 @@
             <DockPanel VerticalAlignment="Bottom" Background="White">
                 <!--Return to previous page-->
                 <Button Name="GoBack" Content="Back" Width="50" Click="GoBack_Click" Margin="10" HorizontalAlignment="Left"/>
+                <StackPanel Orientation="Horizontal" Margin="10" Width="120" HorizontalAlignment="Center">
+                    <TextBlock Text="Questions Added: " VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding QuestionCount}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Text="  " VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </StackPanel>
                 <DockPanel HorizontalAlignment="Right">
                     <!--Save exam and return to it later-->
                     <Button Name="Save" Content="Save" Width="50" Click="Save_Click" Margin="10"/>
                     <!--Export exam to prefered format-->
                     <Button Name="Export" Content="Export" Width="50" Click="Export_Click" Margin="10"/>
                 </DockPanel>
+                
+                
             </DockPanel>
+   
         </Border>
     </Grid>
 

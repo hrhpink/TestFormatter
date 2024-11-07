@@ -4,10 +4,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using TestFormatter.Models;
+using Microsoft.Win32;
+using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace TestFormatter.Controls
 {
-    public partial class QuestionControl : UserControl
+    public partial class QuestionControl : UserControl, INotifyPropertyChanged
     {
         private Question question;
         public Question Question
@@ -17,8 +20,12 @@ namespace TestFormatter.Controls
             {
                 question = value;
                 DataContext = question; // Set the DataContext to enable binding
+                UpdateHeaderText(); // Update header text initially
             }
         }
+
+        //Header text property
+        public string HeaderText { get; private set; } // Property for the header
 
         //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion)
         public event EventHandler<Question> QuestionTypeChanged;
@@ -29,7 +36,14 @@ namespace TestFormatter.Controls
             InitializeComponent();
             DataContext = this;
         }
-        
+
+        private void UpdateHeaderText()
+        {
+            // Set HeaderText based on Question properties (e.g., number and type)
+            HeaderText = $"Question #{question.Number}: {question.Type}";
+            OnPropertyChanged(nameof(HeaderText)); // Notify the UI of the update
+        }
+
         //TextBox logic so it saves content when user clicks away
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -72,6 +86,7 @@ namespace TestFormatter.Controls
                 // Set the question type and adjust properties
                 question.SetType(selectedType);
                 DataContext = question;
+                UpdateHeaderText(); // Refresh header after type changes
                 QuestionTypeChanged?.Invoke(this, question);
 
                 // Update the AdditionalOptionsPanel based on the selected type
@@ -185,6 +200,39 @@ namespace TestFormatter.Controls
                 AdditionalOptionsPanel.Children.Add(optionPanel);
                 optionTextBox.Focus();
             }
+        }
+        private void AddImageCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            // Open file dialog to select an image
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                // Load the selected image
+                BitmapImage image = new BitmapImage(new Uri(openFileDialog.FileName));
+                question.QuestionImage = image;
+
+                // Display the image in the Image control
+                QuestionImageControl.Source = image;
+                QuestionImageControl.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void AddImageCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // Remove the image if the checkbox is unchecked
+            question.QuestionImage = null;
+            QuestionImageControl.Source = null;
+            QuestionImageControl.Visibility = Visibility.Collapsed;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
