@@ -16,6 +16,7 @@
                 <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged">
                     <ComboBoxItem Content="Free Response" />
                     <ComboBoxItem Content="Multiple Choice" />
+                    <ComboBoxItem Content="Matching" />
                 </ComboBox>
 
                 <!--Question Number-->
@@ -30,7 +31,7 @@
             <!--Question Space-->
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="20 0 10 0" FontSize="12"  Width="90" VerticalAlignment="Center"/>
-                <TextBox x:Name="QuestionTextBox" Width="372" Height="25" FontSize ="12" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                <TextBox x:Name="QuestionTextBox" Width="372" Height="25" FontSize ="12" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" TextChanged="QuestionTextBox_TextChanged"/>
             </StackPanel>
 
             <!--Add Image Space-->
@@ -47,6 +48,8 @@
             <!-- Content area that changes based on the selected question type -->
             <StackPanel x:Name="AdditionalOptionsPanel" Margin="10 10 10 0" />
             <StackPanel x:Name="AddOptionButton" Margin="10 0 10 10" />
+            <StackPanel x:Name="AddMatchingButton" Margin="10 0 10 10" />
+            
 
             <Button x:Name="Delete" Content="Delete Question" Width="95" Click="DeleteButton_Click" Margin="10 0 10 20" HorizontalAlignment="Center"/>
 

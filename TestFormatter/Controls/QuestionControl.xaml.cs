@@ -54,6 +54,25 @@ namespace TestFormatter.Controls
             }
         }
 
+        //TextBox logic so it adjust veritcal size based on user input
+        private void QuestionTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                // Measure the height required to display all the text
+                textBox.Measure(new Size(textBox.Width, double.PositiveInfinity));
+                double requiredHeight = textBox.ExtentHeight;
+
+                // Check if the content overflows or wraps onto a new line
+                if (requiredHeight > textBox.ActualHeight)
+                {
+                    // Add padding only if a new line is needed
+                    textBox.Height = requiredHeight + 5;
+                }
+            }
+        }
+
+
         //Question delete button logic
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
@@ -104,6 +123,19 @@ namespace TestFormatter.Controls
                     AddOptionButton.Children.Add(addOptionButton);
                 }
 
+                AddMatchingButton.Children.Clear();
+                if (selectedType == "Matching")
+                {
+                    Button addMatchingPairs = new Button
+                    {
+                        Content = " Add Matching pair ",
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        Margin = new Thickness(5, 0, 5, 5)
+                    };
+                    addMatchingPairs.Click += AddMatchingPairs_Click;
+                    AddMatchingButton.Children.Add(addMatchingPairs);
+                }
+
                 if (selectedType == "Free Response")
                 {
                     StackPanel linePanel = new StackPanel()
@@ -145,6 +177,81 @@ namespace TestFormatter.Controls
                     linePanel.Children.Add(lineTextBlock);
                     linePanel.Children.Add(lineTextBox);
                 }
+            }
+        }
+
+        private void AddMatchingPairs_Click(object sender, RoutedEventArgs e)
+        {
+            if (question.Type == "Matching")
+            {
+                StackPanel matchingPanel = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    Margin = new Thickness(100, 5, 5, 5)
+                };
+
+                TextBox matchingTextBox1 = new TextBox
+                {
+                    Width = 200,
+                    Margin = new Thickness(5)
+                };
+
+                TextBox matchingTextBox2 = new TextBox
+                {
+                    Width = 200,
+                    Margin = new Thickness(5)
+                };
+
+                matchingTextBox1.LostFocus += (s, args) =>
+                {
+                    int index = AdditionalOptionsPanel.Children.IndexOf(matchingPanel);
+                    if (index >= 0 && index < question.Matching.Count)
+                    {
+                        question.Matching[index] = new Tuple<string, string>(matchingTextBox1.Text, question.Matching[index].Item2);
+                    }
+                    else if (index >= question.Matching.Count)
+                    {
+                        question.Matching.Add(new Tuple<string, string>(matchingTextBox1.Text, matchingTextBox2.Text));
+                    }
+                };
+
+                matchingTextBox2.LostFocus += (s, args) =>
+                {
+                    int index = AdditionalOptionsPanel.Children.IndexOf(matchingPanel);
+                    if (index >= 0 && index < question.Matching.Count)
+                    {
+                        question.Matching[index] = new Tuple<string, string>(question.Matching[index].Item1, matchingTextBox2.Text);
+                    }
+                    else if (index >= question.Matching.Count)
+                    {
+                        question.Matching.Add(new Tuple<string, string>(matchingTextBox1.Text, matchingTextBox2.Text));
+                    }
+                };
+
+                Button deleteButton = new Button
+                {
+                    Content = "❌",
+                    Margin = new Thickness(5)
+                };
+                deleteButton.Click += (s, args) =>
+                {
+                    int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(matchingPanel) - 1;
+
+                    if (positionOfOption >= 0 && positionOfOption < question.Matching.Count)
+                    {
+                        AdditionalOptionsPanel.Children.Remove(matchingPanel);
+                        question.Matching.RemoveAt(positionOfOption);
+                    }
+                };
+
+                matchingPanel.Children.Add(matchingTextBox1);
+                matchingPanel.Children.Add(matchingTextBox2);
+                matchingPanel.Children.Add(deleteButton);
+
+                AdditionalOptionsPanel.Children.Add(matchingPanel);
+                matchingTextBox1.Focus();
+                matchingTextBox2.Focus();
             }
         }
 

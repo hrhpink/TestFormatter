@@ -16,6 +16,7 @@ namespace TestFormatter.Models
         public string Type { get; set; }
         public List<string> Options { get; set; } // Only used for Multiple Choice
         public BitmapImage QuestionImage { get; set; } // Property to store the image associated with the question
+        public List<Tuple<string, string>> Matching {  get; set; } // Only used for Mathcing
 
 
         public void SetType(string newType)
@@ -28,6 +29,10 @@ namespace TestFormatter.Models
             else if (newType == "Multiple Choice")
             {
                 Options = new List<string>(); // Initialize options for Multiple Choice
+            }
+            else if (newType == "Matching")
+            {
+                Matching = new List<Tuple<string, string>>(); // Initialize matching for matching questions
             }
         }
     }
