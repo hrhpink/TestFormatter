@@ -9,7 +9,7 @@ namespace TestFormatter.Models
     public class Question
     {
         public string QuestionText { get; set; }
-        public int Points { get; set; }
+        public double Points { get; set; }
         public int Number { get; set; }
         public int NumLines { get; set; }
         public string Type { get; set; }
