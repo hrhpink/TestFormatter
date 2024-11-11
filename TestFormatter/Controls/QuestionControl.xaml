@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:TestFormatter.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
-    <Expander Header="{Binding HeaderText, RelativeSource={RelativeSource AncestorType={x:Type local:QuestionControl}}}" IsExpanded="True">
+    <Expander Background="LightGray" Header="{Binding HeaderText, RelativeSource={RelativeSource AncestorType={x:Type local:QuestionControl}}}" IsExpanded="True">
         <StackPanel Background="LightGray" Margin="10 10 10 0">
             <!--Question parameter row-->
             <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Left">
@@ -34,11 +34,14 @@
             </StackPanel>
 
             <!--Add Image Space-->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
+            <StackPanel Name="ImagePanel" Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 5 0 0">
                 <!-- CheckBox to add image -->
-                <CheckBox Content="Add Image" Checked="AddImageCheckBox_Checked" Unchecked="AddImageCheckBox_Unchecked" Margin="5" />
+                <CheckBox Content="Add Image" Checked="AddImageCheckBox_Checked" Unchecked="AddImageCheckBox_Unchecked" Margin="0 0 0 0" />
                 <!-- Image display control -->
-                <Image x:Name="QuestionImageControl" Width="150" Height="150" Visibility="Collapsed" HorizontalAlignment="Center" Margin="20 0 0 0"/>
+                <Button Name="AddPicture" Click="AddPicture_Click" Content = "Attach file" Margin="5 0 0 0" Visibility="Hidden"></Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0">
+                <Image x:Name="QuestionImageControl" Width="250" Height="150" Visibility="Collapsed" HorizontalAlignment="Center" Margin="15 0 0 0"/>
             </StackPanel>
 
             <!-- Content area that changes based on the selected question type -->

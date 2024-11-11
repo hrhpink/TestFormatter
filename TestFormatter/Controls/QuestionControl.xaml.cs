@@ -203,6 +203,11 @@ namespace TestFormatter.Controls
         }
         private void AddImageCheckBox_Checked(object sender, RoutedEventArgs e)
         {
+            AddPicture.Visibility = Visibility.Visible;
+        }
+
+        private void AddPicture_Click(object sender, RoutedEventArgs e)
+        {
             // Open file dialog to select an image
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -211,22 +216,20 @@ namespace TestFormatter.Controls
 
             if (openFileDialog.ShowDialog() == true)
             {
-                // Load the selected image
                 BitmapImage image = new BitmapImage(new Uri(openFileDialog.FileName));
-                question.QuestionImage = image;
+                question.QuestionImage = image; // Store the image in the Question class
 
-                // Display the image in the Image control
-                QuestionImageControl.Source = image;
+                QuestionImageControl.Source = image; // Display the image in the UI
                 QuestionImageControl.Visibility = Visibility.Visible;
             }
         }
-
         private void AddImageCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             // Remove the image if the checkbox is unchecked
             question.QuestionImage = null;
             QuestionImageControl.Source = null;
             QuestionImageControl.Visibility = Visibility.Collapsed;
+            AddPicture.Visibility = Visibility.Collapsed;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
