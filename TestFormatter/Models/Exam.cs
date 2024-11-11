@@ -23,7 +23,7 @@ namespace TestFormatter.Models
         public bool IncludeGradeField { get; set; }
 
         public int QuestionLimit { get; set; } = 0; //Default limit (0 means no limit)
-        public int NumberOfPoints { get; set; }
+        public double NumberOfPoints { get; set; }
 
         public int QuestionCount => Questions.Count; // Property to track number of questions
 
@@ -41,8 +41,10 @@ namespace TestFormatter.Models
 
         public bool ValidateQuestions(out string validationMessage)
         {
+            double sumOfPoints = 0;
             foreach (var question in Questions)
             {
+                sumOfPoints += question.Points;
                 if (question.QuestionText == null)
                 {
                     validationMessage = $"One or more of your questions are missing the question text.";
@@ -88,7 +90,11 @@ namespace TestFormatter.Models
                         return false;
                     }
                 }
-
+            }
+            if (NumberOfPoints != sumOfPoints)
+            {
+                validationMessage = $"The \"Total Points\" field does not match the sum of the question point values.";
+                return false;
             }
 
             validationMessage = ""; // No issues
