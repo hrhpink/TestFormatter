@@ -55,7 +55,7 @@ namespace TestFormatter.Controls
         }
 
         //TextBox logic so it adjust veritcal size based on user input
-        private void QuestionTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxAdjustment_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox textBox)
             {
@@ -73,7 +73,7 @@ namespace TestFormatter.Controls
                     // Add padding only if a new line is needed
                     textBox.Height = textboxHeight + 20;
                 }
-                else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 15))
+                else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 18))
                 {
                   textBox.Height = textboxHeight - 20;
 
@@ -147,6 +147,15 @@ namespace TestFormatter.Controls
                         Margin = new Thickness(15, 0, 5, 0)
                     };
 
+                    //Instructions
+                    TextBlock matchingInstructionsTextBlock = new TextBlock
+                    {
+                        FontSize = 10,
+                        Text = "Matching Instructions:\nInput Questions and answers for the questions, they must be in separated by a new line (enter).",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 10, 0, 10) // Margin to add spacing below label
+                    };
+
                     // Left vertical panel for questions/words
                     StackPanel leftPanel = new StackPanel()
                     {
@@ -213,6 +222,7 @@ namespace TestFormatter.Controls
 
 
                     //Add Children to panel so they are displayed
+                    AdditionalOptionsPanel.Children.Add(matchingInstructionsTextBlock);
                     AdditionalOptionsPanel.Children.Add(matchingPanel);
 
                     // Add the TextBlocks and TextBoxes to their respective vertical panels
@@ -286,9 +296,16 @@ namespace TestFormatter.Controls
 
                 TextBox optionTextBox = new TextBox
                 {
+                    Height = 25,
                     Width = 300,
-                    Margin = new Thickness(5)
+                    Margin = new Thickness(5),
+                    AcceptsReturn = true, // Allows multiline input
+                    TextWrapping = TextWrapping.Wrap
                 };
+
+                //TextChanged event for dynamic height adjustment
+                optionTextBox.TextChanged += TextBoxAdjustment_TextChanged;
+
                 optionTextBox.LostFocus += (s, args) =>
                 {
                     int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
@@ -309,7 +326,7 @@ namespace TestFormatter.Controls
                 };
                 deleteButton.Click += (s, args) =>
                 {
-                    int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel) - 1;
+                    int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
 
                     if (positionOfOption >= 0 && positionOfOption < question.Options.Count)
                     {
