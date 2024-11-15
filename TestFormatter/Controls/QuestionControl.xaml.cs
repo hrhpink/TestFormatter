@@ -59,15 +59,24 @@ namespace TestFormatter.Controls
         {
             if (sender is TextBox textBox)
             {
+                //wrapAroundHeight = amount of vertical space the characters are currently using
+                //textboxHeight = current height of textbox
+
                 // Measure the height required to display all the text
                 textBox.Measure(new Size(textBox.Width, double.PositiveInfinity));
-                double requiredHeight = textBox.ExtentHeight;
+                double wrapAroundHeight = Math.Round((textBox.ExtentHeight),0);
+                double textboxHeight = textBox.Height;
 
                 // Check if the content overflows or wraps onto a new line
-                if (requiredHeight > textBox.ActualHeight)
+                if (wrapAroundHeight > textboxHeight)
                 {
                     // Add padding only if a new line is needed
-                    textBox.Height = requiredHeight + 5;
+                    textBox.Height = textboxHeight + 20;
+                }
+                else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 15))
+                {
+                  textBox.Height = textboxHeight - 20;
+
                 }
             }
         }
@@ -272,7 +281,7 @@ namespace TestFormatter.Controls
                 {
                     Orientation = Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(145, 5, 5, 5)
+                    Margin = new Thickness(101, 0, 5, 5)
                 };
 
                 TextBox optionTextBox = new TextBox
