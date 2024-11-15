@@ -6,37 +6,59 @@
              xmlns:local="clr-namespace:TestFormatter.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600">
-    <StackPanel Background="LightGray" Margin="10 10 10 0">
-        <!--Question parameter row-->
-        <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Left">
+    <StackPanel Orientation="Horizontal" Background="LightGray" Margin="0 0 0 10">
 
-            <!--Question Type-->
-            <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type:" Margin="10 0 10 0" Width="90" VerticalAlignment="Center"/>
-            <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged">
-                <ComboBoxItem Content="Free Response" />
-                <ComboBoxItem Content="Multiple Choice" />
-            </ComboBox>
+        <Expander Background="LightGray" Header="{Binding HeaderText, RelativeSource={RelativeSource AncestorType={x:Type local:QuestionControl}}}" IsExpanded="True">
+            <StackPanel Background="LightGray" Margin="10 10 10 0">
+                <!--Question parameter row-->
+                <StackPanel Orientation="Horizontal" Margin="5" HorizontalAlignment="Left">
 
-            <!--Question Number-->
-            <TextBlock x:Name="QuestionNumTextBlock" Text="Question Number:" Margin="10 0 10 0" FontSize="12" VerticalAlignment="Center"/>
-            <TextBox x:Name="QuestionNumTextBox" Width="40" Height="25" VerticalContentAlignment="Center" FontSize ="12" Text="{Binding Number, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                    <!--Question Type-->
+                    <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type:" Margin="10 0 10 0" Width="90" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged">
+                        <ComboBoxItem Content="Free Response" />
+                        <ComboBoxItem Content="Multiple Choice" />
+                        <ComboBoxItem Content="Matching" />
+                    </ComboBox>
 
-            <!--Question Points-->
-            <TextBlock x:Name="PointsTextBlock" Text="Points:" Margin="10 0 10 0" FontSize="12" VerticalAlignment="Center"/>
-            <TextBox x:Name="PointsTextBox" Width="40" Height="25" VerticalContentAlignment="Center" FontSize ="12" Text="{Binding Points, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+
+                    <!--Question Points-->
+                    <TextBlock x:Name="PointsTextBlock" Text="Points:" Margin="167 0 10 0" FontSize="12" VerticalAlignment="Center"/>
+                    <TextBox x:Name="PointsTextBox" Width="40" Height="25" VerticalContentAlignment="Center" FontSize ="12" Text="{Binding Points, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                </StackPanel>
+
+                <!--Question Space-->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="15 0 10 0" FontSize="12"  Width="90" VerticalAlignment="Center"/>
+                    <TextBox x:Name="QuestionTextBox" Width="372" Height="25" FontSize ="15" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" TextChanged="QuestionTextBox_TextChanged"/>
+                </StackPanel>
+
+                <!--Add Image Space-->
+                <StackPanel Name="ImagePanel" Orientation="Horizontal" HorizontalAlignment="Left" Margin="15 5 0 0">
+                    <!-- CheckBox to add image -->
+                    <CheckBox Content="Add Image" Checked="AddImageCheckBox_Checked" Unchecked="AddImageCheckBox_Unchecked"/>
+                    <!-- Image display control -->
+                    <Button Name="AddPicture" Click="AddPicture_Click" Content = "Attach file" Margin="5 0 0 0" Visibility="Hidden"></Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5 0 5 0">
+                    <Image x:Name="QuestionImageControl" Width="200" Height="200" Visibility="Collapsed" HorizontalAlignment="Center" Margin="150 5 5 5"/>
+                </StackPanel>
+
+                <!-- Content area that changes based on the selected question type -->
+                <StackPanel x:Name="AdditionalOptionsPanel" Margin="10 0 10 0" />
+                <StackPanel x:Name="AddOptionButton" Margin="10 0 10 10" />
+
+
+                <Button x:Name="Delete" Content="Delete Question" Width="95" Click="DeleteButton_Click" Margin="10 0 10 20" HorizontalAlignment="Center"/>
+
+            </StackPanel>
+        </Expander>
+        <StackPanel Orientation="Horizontal" Background="LightGray" VerticalAlignment="Center">
+            <Button Name="UpArrow" Content="⬆️" Click="UpArrowButton_Click" VerticalAlignment="Center" FontSize="20" Width="20"/>
+            <Button Name="DownArrow" Content="⬇️" Click="DownArrowButton_Click" VerticalAlignment="Center" FontSize="20" Width="20"/>
+
         </StackPanel>
-        
-        <!--Question Space-->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="20 0 10 0" FontSize="12"  Width="90" VerticalAlignment="Center"/>
-            <TextBox x:Name="QuestionTextBox" Width="372" Height="25" FontSize ="12" TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
-        </StackPanel>
-
-        <!-- Content area that changes based on the selected question type -->
-        <StackPanel x:Name="AdditionalOptionsPanel" Margin="10 10 10 0" />
-        <StackPanel x:Name="AddOptionButton" Margin="10 0 10 10" />
-        
-        <Button x:Name="Delete" Content="Delete Question" Width="95" Click="DeleteButton_Click" Margin="10 0 10 20" HorizontalAlignment="Center"/>
-
     </StackPanel>
+    
+    
 </UserControl>

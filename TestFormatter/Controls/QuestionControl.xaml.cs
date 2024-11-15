@@ -4,10 +4,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using TestFormatter.Models;
+using Microsoft.Win32;
+using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace TestFormatter.Controls
 {
-    public partial class QuestionControl : UserControl 
+    public partial class QuestionControl : UserControl, INotifyPropertyChanged
     {
         private Question question;
         public Question Question
@@ -17,10 +20,14 @@ namespace TestFormatter.Controls
             {
                 question = value;
                 DataContext = question; // Set the DataContext to enable binding
+                UpdateHeaderText(); // Update header text initially
             }
         }
 
-        //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion)
+        //Header text property
+        public string HeaderText { get; private set; } // Property for the header
+
+        //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion / Num change)
         public event EventHandler<Question> QuestionTypeChanged;
         public event EventHandler<Question> QuestionDeleted;
 
@@ -29,7 +36,14 @@ namespace TestFormatter.Controls
             InitializeComponent();
             DataContext = this;
         }
-        
+
+        private void UpdateHeaderText()
+        {
+            // Set HeaderText based on Question properties (e.g., number and type)
+            HeaderText = $"Question #{question.Number}: {question.Type}";
+            OnPropertyChanged(nameof(HeaderText)); // Notify the UI of the update
+        }
+
         //TextBox logic so it saves content when user clicks away
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -39,6 +53,34 @@ namespace TestFormatter.Controls
                 QuestionTypeChanged?.Invoke(this, question);
             }
         }
+
+        //TextBox logic so it adjust veritcal size based on user input
+        private void QuestionTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox textBox)
+            {
+                //wrapAroundHeight = amount of vertical space the characters are currently using
+                //textboxHeight = current height of textbox
+
+                // Measure the height required to display all the text
+                textBox.Measure(new Size(textBox.Width, double.PositiveInfinity));
+                double wrapAroundHeight = Math.Round((textBox.ExtentHeight),0);
+                double textboxHeight = textBox.Height;
+
+                // Check if the content overflows or wraps onto a new line
+                if (wrapAroundHeight > textboxHeight)
+                {
+                    // Add padding only if a new line is needed
+                    textBox.Height = textboxHeight + 20;
+                }
+                else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 15))
+                {
+                  textBox.Height = textboxHeight - 20;
+
+                }
+            }
+        }
+
 
         //Question delete button logic
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
@@ -72,10 +114,13 @@ namespace TestFormatter.Controls
                 // Set the question type and adjust properties
                 question.SetType(selectedType);
                 DataContext = question;
+                UpdateHeaderText(); // Refresh header after type changes
                 QuestionTypeChanged?.Invoke(this, question);
 
                 // Update the AdditionalOptionsPanel based on the selected type
                 AdditionalOptionsPanel.Children.Clear();
+
+                //Mulltiple Choice
                 AddOptionButton.Children.Clear();
                 if (selectedType == "Multiple Choice")
                 {
@@ -89,6 +134,99 @@ namespace TestFormatter.Controls
                     AddOptionButton.Children.Add(addOptionButton);
                 }
 
+                //Matching
+                if (selectedType == "Matching")
+                {
+                    question.QuestionText = "Match the following options";
+
+                    StackPanel matchingPanel = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(15, 0, 5, 0)
+                    };
+
+                    // Left vertical panel for questions/words
+                    StackPanel leftPanel = new StackPanel()
+                    {
+                        Orientation = Orientation.Vertical,
+                        Margin = new Thickness(5, 0, 10, 0)
+                    };
+
+                    // Label for questions/words
+                    TextBlock matchingTextBlock1 = new TextBlock
+                    {
+                        Text = "Input the questions or words",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
+                    };
+
+                    // TextBox for questions/words
+                    TextBox matchingTextBox1 = new TextBox
+                    {
+                        Width = 200,
+                        Height = 150,
+                        Margin = new Thickness(5),
+                        AcceptsReturn = true,
+                        TextWrapping = TextWrapping.Wrap
+                    };
+
+                    // Right vertical panel for matching options
+                    StackPanel rightPanel = new StackPanel()
+                    {
+                        Orientation = Orientation.Vertical,
+                        Margin = new Thickness(10, 0, 5, 0)
+                    };
+
+                    // Label for options to match
+                    TextBlock matchingTextBlock2 = new TextBlock
+                    {
+                        Text = "Input the options for matching",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
+                    };
+
+                    // TextBox for options to match
+                    TextBox matchingTextBox2 = new TextBox
+                    {
+                        Width = 200,
+                        Height = 150,
+                        Margin = new Thickness(5),
+                        AcceptsReturn = true,
+                        TextWrapping = TextWrapping.Wrap
+                    };
+
+                    // Update Matching[0] with new lines in matchingTextBox1
+                    matchingTextBox1.LostFocus += (s, args) =>
+                    {
+                        question.Matching.Item1.Clear(); // Clear existing entries
+                        question.Matching.Item1.AddRange(matchingTextBox1.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                    };
+
+                    // Update Matching[1] with new lines in matchingTextBox2
+                    matchingTextBox2.LostFocus += (s, args) =>
+                    {
+                        question.Matching.Item2.Clear(); // Clear existing entries
+                        question.Matching.Item2.AddRange(matchingTextBox2.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                    };
+
+
+                    //Add Children to panel so they are displayed
+                    AdditionalOptionsPanel.Children.Add(matchingPanel);
+
+                    // Add the TextBlocks and TextBoxes to their respective vertical panels
+                    leftPanel.Children.Add(matchingTextBlock1);
+                    leftPanel.Children.Add(matchingTextBox1);
+                    rightPanel.Children.Add(matchingTextBlock2);
+                    rightPanel.Children.Add(matchingTextBox2);
+
+                    // Add the vertical panels to the main horizontal panel
+                    matchingPanel.Children.Add(leftPanel);
+                    matchingPanel.Children.Add(rightPanel);
+                }
+
+                //Free Response
                 if (selectedType == "Free Response")
                 {
                     StackPanel linePanel = new StackPanel()
@@ -133,6 +271,7 @@ namespace TestFormatter.Controls
             }
         }
 
+
         //Logic for AddOption button for multiple choice questions
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
         {
@@ -142,7 +281,7 @@ namespace TestFormatter.Controls
                 {
                     Orientation = Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(145, 5, 5, 5)
+                    Margin = new Thickness(101, 0, 5, 5)
                 };
 
                 TextBox optionTextBox = new TextBox
@@ -185,6 +324,49 @@ namespace TestFormatter.Controls
                 AdditionalOptionsPanel.Children.Add(optionPanel);
                 optionTextBox.Focus();
             }
+        }
+        private void AddImageCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            AddPicture.Visibility = Visibility.Visible;
+        }
+
+        private void AddPicture_Click(object sender, RoutedEventArgs e)
+        {
+            // Open file dialog to select an image
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                BitmapImage image = new BitmapImage(new Uri(openFileDialog.FileName));
+                question.QuestionImage = image; // Store the image in the Question class
+
+                QuestionImageControl.Source = image; // Display the image in the UI
+                QuestionImageControl.Visibility = Visibility.Visible;
+            }
+        }
+        private void AddImageCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // Remove the image if the checkbox is unchecked
+            question.QuestionImage = null;
+            QuestionImageControl.Source = null;
+            QuestionImageControl.Visibility = Visibility.Collapsed;
+            AddPicture.Visibility = Visibility.Collapsed;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void UpArrowButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void DownArrowButton_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
