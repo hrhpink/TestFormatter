@@ -27,7 +27,7 @@ namespace TestFormatter.Controls
         //Header text property
         public string HeaderText { get; private set; } // Property for the header
 
-        //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion)
+        //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion / Num change)
         public event EventHandler<Question> QuestionTypeChanged;
         public event EventHandler<Question> QuestionDeleted;
 
@@ -110,6 +110,8 @@ namespace TestFormatter.Controls
 
                 // Update the AdditionalOptionsPanel based on the selected type
                 AdditionalOptionsPanel.Children.Clear();
+
+                //Mulltiple Choice
                 AddOptionButton.Children.Clear();
                 if (selectedType == "Multiple Choice")
                 {
@@ -123,19 +125,99 @@ namespace TestFormatter.Controls
                     AddOptionButton.Children.Add(addOptionButton);
                 }
 
-                AddMatchingButton.Children.Clear();
+                //Matching
                 if (selectedType == "Matching")
                 {
-                    Button addMatchingPairs = new Button
+                    question.QuestionText = "Match the following options";
+
+                    StackPanel matchingPanel = new StackPanel()
                     {
-                        Content = " Add Matching pair ",
-                        HorizontalAlignment = HorizontalAlignment.Center,
-                        Margin = new Thickness(5, 0, 5, 5)
+                        Orientation = Orientation.Horizontal,
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(15, 0, 5, 0)
                     };
-                    addMatchingPairs.Click += AddMatchingPairs_Click;
-                    AddMatchingButton.Children.Add(addMatchingPairs);
+
+                    // Left vertical panel for questions/words
+                    StackPanel leftPanel = new StackPanel()
+                    {
+                        Orientation = Orientation.Vertical,
+                        Margin = new Thickness(5, 0, 10, 0)
+                    };
+
+                    // Label for questions/words
+                    TextBlock matchingTextBlock1 = new TextBlock
+                    {
+                        Text = "Input the questions or words",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
+                    };
+
+                    // TextBox for questions/words
+                    TextBox matchingTextBox1 = new TextBox
+                    {
+                        Width = 200,
+                        Height = 150,
+                        Margin = new Thickness(5),
+                        AcceptsReturn = true,
+                        TextWrapping = TextWrapping.Wrap
+                    };
+
+                    // Right vertical panel for matching options
+                    StackPanel rightPanel = new StackPanel()
+                    {
+                        Orientation = Orientation.Vertical,
+                        Margin = new Thickness(10, 0, 5, 0)
+                    };
+
+                    // Label for options to match
+                    TextBlock matchingTextBlock2 = new TextBlock
+                    {
+                        Text = "Input the options for matching",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
+                    };
+
+                    // TextBox for options to match
+                    TextBox matchingTextBox2 = new TextBox
+                    {
+                        Width = 200,
+                        Height = 150,
+                        Margin = new Thickness(5),
+                        AcceptsReturn = true,
+                        TextWrapping = TextWrapping.Wrap
+                    };
+
+                    // Update Matching[0] with new lines in matchingTextBox1
+                    matchingTextBox1.LostFocus += (s, args) =>
+                    {
+                        question.Matching.Item1.Clear(); // Clear existing entries
+                        question.Matching.Item1.AddRange(matchingTextBox1.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                    };
+
+                    // Update Matching[1] with new lines in matchingTextBox2
+                    matchingTextBox2.LostFocus += (s, args) =>
+                    {
+                        question.Matching.Item2.Clear(); // Clear existing entries
+                        question.Matching.Item2.AddRange(matchingTextBox2.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                    };
+
+
+                    //Add Children to panel so they are displayed
+                    AdditionalOptionsPanel.Children.Add(matchingPanel);
+
+                    // Add the TextBlocks and TextBoxes to their respective vertical panels
+                    leftPanel.Children.Add(matchingTextBlock1);
+                    leftPanel.Children.Add(matchingTextBox1);
+                    rightPanel.Children.Add(matchingTextBlock2);
+                    rightPanel.Children.Add(matchingTextBox2);
+
+                    // Add the vertical panels to the main horizontal panel
+                    matchingPanel.Children.Add(leftPanel);
+                    matchingPanel.Children.Add(rightPanel);
                 }
 
+                //Free Response
                 if (selectedType == "Free Response")
                 {
                     StackPanel linePanel = new StackPanel()
@@ -180,80 +262,6 @@ namespace TestFormatter.Controls
             }
         }
 
-        private void AddMatchingPairs_Click(object sender, RoutedEventArgs e)
-        {
-            if (question.Type == "Matching")
-            {
-                StackPanel matchingPanel = new StackPanel
-                {
-                    Orientation = Orientation.Horizontal,
-                    HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(100, 5, 5, 5)
-                };
-
-                TextBox matchingTextBox1 = new TextBox
-                {
-                    Width = 200,
-                    Margin = new Thickness(5)
-                };
-
-                TextBox matchingTextBox2 = new TextBox
-                {
-                    Width = 200,
-                    Margin = new Thickness(5)
-                };
-
-                matchingTextBox1.LostFocus += (s, args) =>
-                {
-                    int index = AdditionalOptionsPanel.Children.IndexOf(matchingPanel);
-                    if (index >= 0 && index < question.Matching.Count)
-                    {
-                        question.Matching[index] = new Tuple<string, string>(matchingTextBox1.Text, question.Matching[index].Item2);
-                    }
-                    else if (index >= question.Matching.Count)
-                    {
-                        question.Matching.Add(new Tuple<string, string>(matchingTextBox1.Text, matchingTextBox2.Text));
-                    }
-                };
-
-                matchingTextBox2.LostFocus += (s, args) =>
-                {
-                    int index = AdditionalOptionsPanel.Children.IndexOf(matchingPanel);
-                    if (index >= 0 && index < question.Matching.Count)
-                    {
-                        question.Matching[index] = new Tuple<string, string>(question.Matching[index].Item1, matchingTextBox2.Text);
-                    }
-                    else if (index >= question.Matching.Count)
-                    {
-                        question.Matching.Add(new Tuple<string, string>(matchingTextBox1.Text, matchingTextBox2.Text));
-                    }
-                };
-
-                Button deleteButton = new Button
-                {
-                    Content = "❌",
-                    Margin = new Thickness(5)
-                };
-                deleteButton.Click += (s, args) =>
-                {
-                    int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(matchingPanel) - 1;
-
-                    if (positionOfOption >= 0 && positionOfOption < question.Matching.Count)
-                    {
-                        AdditionalOptionsPanel.Children.Remove(matchingPanel);
-                        question.Matching.RemoveAt(positionOfOption);
-                    }
-                };
-
-                matchingPanel.Children.Add(matchingTextBox1);
-                matchingPanel.Children.Add(matchingTextBox2);
-                matchingPanel.Children.Add(deleteButton);
-
-                AdditionalOptionsPanel.Children.Add(matchingPanel);
-                matchingTextBox1.Focus();
-                matchingTextBox2.Focus();
-            }
-        }
 
         //Logic for AddOption button for multiple choice questions
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
@@ -343,6 +351,13 @@ namespace TestFormatter.Controls
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void UpArrowButton_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void DownArrowButton_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }
