@@ -1,15 +1,25 @@
 # Test Formatter
-Description: This is a Test-Formatter :)
+Description: This program allows users to add questions of different types into a user interface, which will be then exported as a formatted examination ready to be printed.
+
+**Project Specifications:** 
+- The project file was generated using Visual Studio Enterprise 2022 version 17.11.5.
+- It uses .NET version 8.0.
+- The project was created using the Windows Presentation Foundation (WPF) framework.
+
 
 **Requirements:**
+You must install the ".NET Desktop Development" package for Visual Studio to successfully load the project or its equivalent in your coding enviroment of choice. 
 
-The project file was generated using Visual Studio Enterprise 2022 version 17.11.5. 
+# Running Application:
+There are multiple ways to run the application:
+1. Utilize Visual Studio Enterprise with .NET Desktop Developent package, open a copy of our codebase, and compile it.
+   - Follow Steps in "Steps to Install Visual Studio Enterprise" if interested in this step.)
 
-It uses .NET version 8.0.
+2. Download Test Formatter Executable folder in repository and run executable file within it.
+3. Utilize your coding enviroment of choice with .NET Desktop Development package or equivalent to compile and run application. 
 
-You must install the ".NET Desktop Development" package for Visual Studio to successfully load the project.
 
-**Steps to Install:** 
+**Steps to Install Packages for Visual Studio Enterprise:** 
 
 1.) Open Visual Studio Installer 
 
@@ -19,4 +29,3 @@ You must install the ".NET Desktop Development" package for Visual Studio to suc
 
 4.) Click "Modify" and wait for installation to complete
 
-The project was created using the Windows Presentation Foundation (WPF) framework.
