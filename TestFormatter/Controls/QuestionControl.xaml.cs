@@ -55,7 +55,7 @@ namespace TestFormatter.Controls
         }
 
         //TextBox logic so it adjust veritcal size based on user input
-        private void QuestionTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void TextBoxAdjustment_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox textBox)
             {
@@ -73,7 +73,7 @@ namespace TestFormatter.Controls
                     // Add padding only if a new line is needed
                     textBox.Height = textboxHeight + 20;
                 }
-                else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 15))
+                else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 18))
                 {
                   textBox.Height = textboxHeight - 20;
 
@@ -120,10 +120,16 @@ namespace TestFormatter.Controls
                 // Update the AdditionalOptionsPanel based on the selected type
                 AdditionalOptionsPanel.Children.Clear();
 
-                //Mulltiple Choice
+                 ////////////////////
+                //Mulltiple Choice//
+               ////////////////////
                 AddOptionButton.Children.Clear();
                 if (selectedType == "Multiple Choice")
                 {
+                    //Modify QuestionTextBlock to say enter instructions:
+                    QuestionTextBlock.FontSize = 12;
+                    QuestionTextBlock.Text = "Enter Instructions:";
+
                     Button addOptionButton = new Button
                     {
                         Content = " Add Option ",
@@ -133,11 +139,14 @@ namespace TestFormatter.Controls
                     addOptionButton.Click += AddOptionButton_Click;
                     AddOptionButton.Children.Add(addOptionButton);
                 }
-
-                //Matching
+                 ////////////
+                //Matching//
+               ////////////
                 if (selectedType == "Matching")
                 {
-                    question.QuestionText = "Match the following options";
+                    //Modify QuestionTextBlock to say enter instructions:
+                    QuestionTextBlock.FontSize = 12;
+                    QuestionTextBlock.Text = "Enter Instructions:";
 
                     StackPanel matchingPanel = new StackPanel()
                     {
@@ -145,6 +154,15 @@ namespace TestFormatter.Controls
                         HorizontalAlignment = HorizontalAlignment.Left,
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(15, 0, 5, 0)
+                    };
+
+                    //Instructions
+                    TextBlock matchingInstructionsTextBlock = new TextBlock
+                    {
+                        FontSize = 10,
+                        Text = "Matching Instructions:\nInput Questions and answers for the questions, they must be in separated by a new line (enter).",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 10, 0, 10) // Margin to add spacing below label
                     };
 
                     // Left vertical panel for questions/words
@@ -157,8 +175,10 @@ namespace TestFormatter.Controls
                     // Label for questions/words
                     TextBlock matchingTextBlock1 = new TextBlock
                     {
+                        FontSize = 10,
                         Text = "Input the questions or words",
                         VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
                         Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
                     };
 
@@ -182,8 +202,10 @@ namespace TestFormatter.Controls
                     // Label for options to match
                     TextBlock matchingTextBlock2 = new TextBlock
                     {
+                        FontSize = 10,
                         Text = "Input the options for matching",
                         VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
                         Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
                     };
 
@@ -213,6 +235,7 @@ namespace TestFormatter.Controls
 
 
                     //Add Children to panel so they are displayed
+                    AdditionalOptionsPanel.Children.Add(matchingInstructionsTextBlock);
                     AdditionalOptionsPanel.Children.Add(matchingPanel);
 
                     // Add the TextBlocks and TextBoxes to their respective vertical panels
@@ -225,10 +248,15 @@ namespace TestFormatter.Controls
                     matchingPanel.Children.Add(leftPanel);
                     matchingPanel.Children.Add(rightPanel);
                 }
-
-                //Free Response
+                 //////////////////
+                //Free Response //
+               //////////////////
                 if (selectedType == "Free Response")
                 {
+                    //Modify QuestionTextBlock to say enter question:
+                    QuestionTextBlock.FontSize = 12;
+                    QuestionTextBlock.Text = "Enter Question:";
+
                     StackPanel linePanel = new StackPanel()
                     {
                         Orientation = Orientation.Horizontal,
@@ -238,6 +266,7 @@ namespace TestFormatter.Controls
                     };
                     TextBlock lineTextBlock = new TextBlock
                     {
+                        FontSize = 10,
                         Text = "Input number of lines for answer space:",
                         VerticalAlignment= VerticalAlignment.Center,
                         Margin= new Thickness(5, 0, 0, 0)
@@ -268,6 +297,69 @@ namespace TestFormatter.Controls
                     linePanel.Children.Add(lineTextBlock);
                     linePanel.Children.Add(lineTextBox);
                 }
+
+                 //////////////
+                //True/False//
+               //////////////
+                if (selectedType == "True/False")
+                {
+                    //Modify QuestionTextBlock to say enter instructions:
+                    QuestionTextBlock.FontSize = 12;
+                    QuestionTextBlock.Text = "Enter Instructions:";
+
+                    // Label for True/False question box
+                    TextBlock TrueOrFalseTextBlock = new TextBlock
+                    {
+                        FontSize = 10,
+                        Text = "Input the True or False questions \nThey must be separated by a new line (Enter)",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 10, 0, 5) // Margin to add spacing below label
+                    };
+
+                    // TextBox for True/False quesitons
+                    TextBox TrueOrFalseTextBox = new TextBox
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        Width = 200,
+                        Height = 150,
+                        Margin = new Thickness(5),
+                        AcceptsReturn = true,
+                        TextWrapping = TextWrapping.Wrap
+                    };
+
+                    // Update Matching[0] with new lines in matchingTextBox1
+                    TrueOrFalseTextBox.LostFocus += (s, args) =>
+                    {
+                        question.TrueOrFalse.Clear(); // Clear existing entries
+                        question.TrueOrFalse.AddRange(TrueOrFalseTextBox.Text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+                    };
+
+                    AdditionalOptionsPanel.Children.Add(TrueOrFalseTextBlock);
+                    AdditionalOptionsPanel.Children.Add(TrueOrFalseTextBox);
+                }
+
+                  /////////////////////
+                 //Fill in the Blank//
+                ////////////////////
+                if (selectedType == "Fill in the Blank")
+                {
+                    //Adjusting question box message
+                    QuestionTextBlock.FontSize = 12;
+                    QuestionTextBlock.Text = "Enter Question:";
+
+                    // Label for Fill in the blank question box
+                    TextBlock FITBTextBlock = new TextBlock
+                    {
+                        FontSize= 10,
+                        Text = "Input the Fill in the Blank question in Enter Question line.\nMake sure to include plenty of underscores(_) where you want the answer to be in the question.",
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Margin = new Thickness(5, 10, 0, 5) // Margin to add spacing below label
+                    };
+
+                    //Add Children to panel so they are displayed
+                    AdditionalOptionsPanel.Children.Add(FITBTextBlock);
+
+                }
             }
         }
 
@@ -286,9 +378,16 @@ namespace TestFormatter.Controls
 
                 TextBox optionTextBox = new TextBox
                 {
+                    Height = 25,
                     Width = 300,
-                    Margin = new Thickness(5)
+                    Margin = new Thickness(5),
+                    AcceptsReturn = true, // Allows multiline input
+                    TextWrapping = TextWrapping.Wrap
                 };
+
+                //TextChanged event for dynamic height adjustment
+                optionTextBox.TextChanged += TextBoxAdjustment_TextChanged;
+
                 optionTextBox.LostFocus += (s, args) =>
                 {
                     int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
@@ -309,7 +408,7 @@ namespace TestFormatter.Controls
                 };
                 deleteButton.Click += (s, args) =>
                 {
-                    int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel) - 1;
+                    int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
 
                     if (positionOfOption >= 0 && positionOfOption < question.Options.Count)
                     {
