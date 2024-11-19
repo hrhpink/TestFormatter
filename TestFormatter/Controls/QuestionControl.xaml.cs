@@ -126,15 +126,15 @@ namespace TestFormatter.Controls
                 AddOptionButton.Children.Clear();
                 if (selectedType == "Multiple Choice")
                 {
-                    //Modify QuestionTextBlock to say enter instructions:
+                    //Modify QuestionTextBlock to say enter question:
                     QuestionTextBlock.FontSize = 12;
-                    QuestionTextBlock.Text = "Enter Instructions:";
+                    QuestionTextBlock.Text = "Enter Question:";
 
                     Button addOptionButton = new Button
                     {
                         Content = " Add Option ",
                         HorizontalAlignment = HorizontalAlignment.Center,
-                        Margin = new Thickness(5, 0, 5, 5)
+                        Margin = new Thickness(5, 0, 5, 0)
                     };
                     addOptionButton.Click += AddOptionButton_Click;
                     AddOptionButton.Children.Add(addOptionButton);
@@ -153,14 +153,14 @@ namespace TestFormatter.Controls
                         Orientation = Orientation.Horizontal,
                         HorizontalAlignment = HorizontalAlignment.Left,
                         VerticalAlignment = VerticalAlignment.Center,
-                        Margin = new Thickness(15, 0, 5, 0)
+                        Margin = new Thickness(5, 0, 5, 0)
                     };
 
                     //Instructions
                     TextBlock matchingInstructionsTextBlock = new TextBlock
                     {
-                        FontSize = 10,
-                        Text = "Matching Instructions:\nInput Questions and answers for the questions, they must be in separated by a new line (enter).",
+                        FontSize = 12,
+                        Text = "Matching Instructions:\n• Input questions and matching options in the corresponding boxes below.\n• Each question and option must be separated by a new line (Enter).",
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(5, 10, 0, 10) // Margin to add spacing below label
                     };
@@ -169,14 +169,14 @@ namespace TestFormatter.Controls
                     StackPanel leftPanel = new StackPanel()
                     {
                         Orientation = Orientation.Vertical,
-                        Margin = new Thickness(5, 0, 10, 0)
+                        Margin = new Thickness(0, 0, 10, 0)
                     };
 
                     // Label for questions/words
                     TextBlock matchingTextBlock1 = new TextBlock
                     {
-                        FontSize = 10,
-                        Text = "Input the questions or words",
+                        FontSize = 12,
+                        Text = "Questions",
                         VerticalAlignment = VerticalAlignment.Center,
                         HorizontalAlignment = HorizontalAlignment.Center,
                         Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
@@ -185,9 +185,9 @@ namespace TestFormatter.Controls
                     // TextBox for questions/words
                     TextBox matchingTextBox1 = new TextBox
                     {
-                        Width = 200,
+                        Width = 222.5,
                         Height = 150,
-                        Margin = new Thickness(5),
+                        Margin = new Thickness(0, 5, 5, 5),
                         AcceptsReturn = true,
                         TextWrapping = TextWrapping.Wrap
                     };
@@ -202,8 +202,8 @@ namespace TestFormatter.Controls
                     // Label for options to match
                     TextBlock matchingTextBlock2 = new TextBlock
                     {
-                        FontSize = 10,
-                        Text = "Input the options for matching",
+                        FontSize = 12,
+                        Text = "Matching Options",
                         VerticalAlignment = VerticalAlignment.Center,
                         HorizontalAlignment = HorizontalAlignment.Center,
                         Margin = new Thickness(5, 0, 0, 5) // Margin to add spacing below label
@@ -212,9 +212,9 @@ namespace TestFormatter.Controls
                     // TextBox for options to match
                     TextBox matchingTextBox2 = new TextBox
                     {
-                        Width = 200,
+                        Width = 222.5,
                         Height = 150,
-                        Margin = new Thickness(5),
+                        Margin = new Thickness(0, 5, 5, 5),
                         AcceptsReturn = true,
                         TextWrapping = TextWrapping.Wrap
                     };
@@ -266,10 +266,10 @@ namespace TestFormatter.Controls
                     };
                     TextBlock lineTextBlock = new TextBlock
                     {
-                        FontSize = 10,
+                        FontSize = 12,
                         Text = "Input number of lines for answer space:",
                         VerticalAlignment= VerticalAlignment.Center,
-                        Margin= new Thickness(5, 0, 0, 0)
+                        //Margin= new Thickness(5, 0, 0, 0)
 
                     };
                     TextBox lineTextBox = new TextBox
@@ -310,8 +310,8 @@ namespace TestFormatter.Controls
                     // Label for True/False question box
                     TextBlock TrueOrFalseTextBlock = new TextBlock
                     {
-                        FontSize = 10,
-                        Text = "Input the True or False questions \nThey must be separated by a new line (Enter)",
+                        FontSize = 12,
+                        Text = "True or False Instructions:\n• Enter questions in the textbox below.\n• All questions must be separated by a new line (Enter).\nNote: Test Formatter will include the True/False options in the final output.",
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(5, 10, 0, 5) // Margin to add spacing below label
                     };
@@ -320,7 +320,7 @@ namespace TestFormatter.Controls
                     TextBox TrueOrFalseTextBox = new TextBox
                     {
                         HorizontalAlignment = HorizontalAlignment.Left,
-                        Width = 200,
+                        Width = 470,
                         Height = 150,
                         Margin = new Thickness(5),
                         AcceptsReturn = true,
@@ -350,8 +350,8 @@ namespace TestFormatter.Controls
                     // Label for Fill in the blank question box
                     TextBlock FITBTextBlock = new TextBlock
                     {
-                        FontSize= 10,
-                        Text = "Input the Fill in the Blank question in Enter Question line.\nMake sure to include plenty of underscores(_) where you want the answer to be in the question.",
+                        FontSize= 12,
+                        Text = "For Fill in the Blank, input your question in the box above.\nNote: Make sure to include a sequence of underscores (_) for the missing term that\nis sufficiently long for the correct answer.",
                         VerticalAlignment = VerticalAlignment.Center,
                         Margin = new Thickness(5, 10, 0, 5) // Margin to add spacing below label
                     };
@@ -373,7 +373,7 @@ namespace TestFormatter.Controls
                 {
                     Orientation = Orientation.Horizontal,
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    Margin = new Thickness(101, 0, 5, 5)
+                    Margin = new Thickness(106, 0, 5, 5)
                 };
 
                 TextBox optionTextBox = new TextBox

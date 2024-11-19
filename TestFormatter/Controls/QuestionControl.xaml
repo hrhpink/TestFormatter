@@ -31,7 +31,7 @@
 
                 <!--Question Space-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="15 0 10 0" FontSize="12"  Width="95" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="15 0 10 0" FontSize="12"  Width="96" VerticalAlignment="Center"/>
                     <TextBox x:Name="QuestionTextBox" Width="364" Height="25" FontSize ="15" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" TextChanged="TextBoxAdjustment_TextChanged"/>
                 </StackPanel>
 
@@ -51,7 +51,7 @@
                 <StackPanel x:Name="AddOptionButton" Margin="10 0 10 10" />
 
 
-                <Button x:Name="Delete" Content="Delete Question" Width="95" Click="DeleteButton_Click" Margin="10 0 10 20" HorizontalAlignment="Center"/>
+                <Button x:Name="Delete" Content="Delete Question" Width="95" Click="DeleteButton_Click" Margin="30 0 0 15" HorizontalAlignment="Center"/>
 
             </StackPanel>
         </Expander>
