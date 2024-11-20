@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using TestFormatter.Controls;
 using TestFormatter.Models;
 using Microsoft.Win32;
+using System.IO;
 
 namespace TestFormatter.Pages
 {
@@ -93,7 +94,26 @@ namespace TestFormatter.Pages
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
+            string validationMessage;
 
+            // Assuming 'exam' is an instance of your Exam class
+            if (!currentExam.ValidateQuestions(out validationMessage))
+            {
+                MessageBox.Show(validationMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Json File (*.json)|*.json",
+                Title = "Save Exam Questions"
+            };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                // Assuming 'exam' is an instance of your Exam class
+                currentExam.ExportToJsonFile(currentExam, saveFileDialog.FileName);
+                MessageBox.Show("Questions saved successfully.", "Save", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void Export_Click(object sender, RoutedEventArgs e)
@@ -110,7 +130,7 @@ namespace TestFormatter.Pages
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Text File (*.txt)|*.txt",
-                Title = "Save Exam Questions"
+                Title = "Export Exam Questions"
             };
             if (saveFileDialog.ShowDialog() == true)
             {

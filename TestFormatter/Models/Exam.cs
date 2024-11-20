@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.Json;
 using System.Printing.IndexedProperties;
 
 
@@ -149,5 +150,15 @@ namespace TestFormatter.Models
                 File.WriteAllText(filePath, sb.ToString());
             }
 
+        public void ExportToJsonFile(Exam exam, string filePath)
+        {
+            string jsonContent = JsonSerializer.Serialize(exam, new JsonSerializerOptions
+            {
+                WriteIndented = true // Makes the JSON more readable
+            });
+
+            // Save JSON to the specified file path
+            File.WriteAllText(filePath, jsonContent);
+        }
     }
 }
