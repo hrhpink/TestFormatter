@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.ComponentModel;
 using System.Printing.IndexedProperties;
-
-
+using System.Text.Json;
 
 namespace TestFormatter.Models
 {
@@ -42,19 +41,14 @@ namespace TestFormatter.Models
         public bool ValidateQuestions(out string validationMessage)
         {
             double sumOfPoints = 0;
-            foreach (var question in Questions)
+            for (int i = 0; i < Questions.Count; i++)
             {
+                Question question = Questions[i];
                 sumOfPoints += question.Points;
                 if (question.QuestionText == null)
                 {
                     validationMessage = $"One or more of your questions are missing the question text.";
                     return false;
-                }
-                else if (question.Number <= 0 )
-                {
-                    validationMessage = $"Make sure all questions have a question number.";
-                    return false;
-
                 }
                 else if (question.Points <= 0)
                 {
@@ -66,7 +60,7 @@ namespace TestFormatter.Models
                     // Check if options exist for multiple choice questions
                     if (question.Options == null || question.Options.Count == 0)
                     {
-                        validationMessage = $"Question {question.Number} is multiple choice but has no options.";
+                        validationMessage = $"Question {i+1} is multiple choice but has no options.";
                         return false;
                     }
                     else
@@ -75,7 +69,7 @@ namespace TestFormatter.Models
                         {
                             if(option == "")
                             {
-                                validationMessage = $"Question {question.Number} is multiple choice but has empty options.";
+                                validationMessage = $"Question {i+1} is multiple choice but has empty options.";
                                 return false;
                             }
                         }
@@ -86,7 +80,7 @@ namespace TestFormatter.Models
                     // Check if numLines is set for free response questions
                     if (question.NumLines <= 0)
                     {
-                        validationMessage = $"Question {question.Number} is free response but has no placeholder lines specified.";
+                        validationMessage = $"Question {i+1} is free response but has no placeholder lines specified.";
                         return false;
                     }
                 }
@@ -143,9 +137,10 @@ namespace TestFormatter.Models
                     }
                 }
 
-                foreach (var question in Questions)
+                for (int j = 0; j < Questions.Count; j++)
                 {
-                    sb.AppendLine($"Question {question.Number}");
+                    Question question = Questions[j];
+                    sb.AppendLine($"Question {j+1}");
                     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
                     if (question.Type == "Multiple Choice")
                     {
@@ -162,8 +157,19 @@ namespace TestFormatter.Models
                         }
                     }
                     sb.AppendLine(new string('-', 40));  // Separator between questions
+
                 }
                 File.WriteAllText(filePath, sb.ToString());
+        }
+        public void ExportToJsonFile(Exam exam, string filePath)
+        {
+            string jsonContent = JsonSerializer.Serialize(exam, new JsonSerializerOptions
+            {
+                WriteIndented = true // Makes the JSON more readable
+            });
+
+            // Save JSON to the specified file path
+            File.WriteAllText(filePath, jsonContent);
         }
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
