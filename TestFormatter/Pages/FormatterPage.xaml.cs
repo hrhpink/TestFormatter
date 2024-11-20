@@ -25,12 +25,12 @@ namespace TestFormatter.Pages
     public partial class FormatterPage : Page
     {
         //Initialization of Exam class to hold questions
-        private Exam currentExam = new Exam();
+        private Exam currentExam;
 
-        public FormatterPage() 
+        public FormatterPage(Exam exam = null) 
         {
             InitializeComponent();
-
+            currentExam = exam ?? new Exam();
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam; 
         }

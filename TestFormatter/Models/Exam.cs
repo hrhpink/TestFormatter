@@ -26,6 +26,13 @@ namespace TestFormatter.Models
 
         public int QuestionCount => Questions.Count; // Property to track number of questions
 
+        public Exam(List<Question>? questions = null)
+        {
+            if (questions != null)
+            {
+                Questions = questions;
+            }
+        }
         public void AddQuestion(Question question)
         {
             Questions.Add(question);
@@ -172,7 +179,7 @@ namespace TestFormatter.Models
             File.WriteAllText(filePath, jsonContent);
         }
         // INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
