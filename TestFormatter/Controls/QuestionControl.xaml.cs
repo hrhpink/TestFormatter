@@ -463,9 +463,57 @@ namespace TestFormatter.Controls
 
         private void UpArrowButton_Click(object sender, RoutedEventArgs e)
         {
+            var parentPanel = this.Parent as Panel;
+            if (parentPanel != null)
+            {
+                int currentIndex = parentPanel.Children.IndexOf(this);
+                if (currentIndex > 0) // Ensure it's not the first question
+                {
+                    // Swap the QuestionControl positions
+                    parentPanel.Children.RemoveAt(currentIndex);
+                    parentPanel.Children.Insert(currentIndex - 1, this);
+
+                    // Swap the numbers
+                    var previousControl = parentPanel.Children[currentIndex - 1] as QuestionControl;
+                    if (previousControl != null)
+                    {
+                        int tempNumber = this.Question.Number;
+                        this.Question.Number = previousControl.Question.Number;
+                        previousControl.Question.Number = tempNumber;
+
+                        // Update header texts
+                        this.UpdateHeaderText();
+                        previousControl.UpdateHeaderText();
+                    }
+                }
+            }
         }
         private void DownArrowButton_Click(object sender, RoutedEventArgs e)
         {
+            var parentPanel = this.Parent as Panel;
+            if (parentPanel != null)
+            {
+                int currentIndex = parentPanel.Children.IndexOf(this);
+                if (currentIndex < parentPanel.Children.Count - 1) // Ensure it's not the last question
+                {
+                    // Swap the QuestionControl positions
+                    var nextControl = parentPanel.Children[currentIndex + 1] as QuestionControl;
+                    parentPanel.Children.RemoveAt(currentIndex + 1);
+                    parentPanel.Children.Insert(currentIndex, nextControl);
+
+                    // Swap the numbers
+                    if (nextControl != null)
+                    {
+                        int tempNumber = this.Question.Number;
+                        this.Question.Number = nextControl.Question.Number;
+                        nextControl.Question.Number = tempNumber;
+
+                        // Update header texts
+                        this.UpdateHeaderText();
+                        nextControl.UpdateHeaderText();
+                    }
+                }
+            }
         }
     }
 }
