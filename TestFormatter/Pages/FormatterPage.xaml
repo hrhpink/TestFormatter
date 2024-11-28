@@ -44,7 +44,7 @@
                     </StackPanel>
                 </Expander>
             </Border>
-
+    
             <!--Questions panel-->
             <ScrollViewer Width="Auto">
                 <StackPanel Name="QuestionsPanel">
@@ -67,6 +67,7 @@
                     <TextBlock Text="  " VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <DockPanel HorizontalAlignment="Right">
+					<Button Content="Shuffle Questions" Click="ShuffleQuestionsButton_Click" />
                     <!--Save exam and return to it later-->
                     <Button Name="Save" Content="Save" Width="50" Click="Save_Click" Margin="10"/>
                     <!--Export exam to prefered format-->

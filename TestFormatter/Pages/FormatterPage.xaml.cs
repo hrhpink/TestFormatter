@@ -27,12 +27,25 @@ namespace TestFormatter.Pages
         //Initialization of Exam class to hold questions
         private Exam currentExam = new Exam();
 
-        public FormatterPage() 
+        public FormatterPage()
         {
             InitializeComponent();
 
             //Set DataContext to bind the XAML to the currentExam object 
-            this.DataContext = currentExam; 
+            this.DataContext = currentExam;
+        }
+
+        private void UpdateQuestionNumbers()
+        {
+            for (int i = 0; i < currentExam.Questions.Count; i++)
+            {
+                currentExam.Questions[i].Number = i + 1; // Update the question's number
+            }
+
+            foreach (var control in QuestionsPanel.Children.OfType<QuestionControl>())
+            {
+                control.UpdateHeaderText(); // Assuming this updates the displayed number
+            }
         }
 
         //Add Questions code
@@ -67,6 +80,8 @@ namespace TestFormatter.Pages
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
 
+            // Update question numbers
+            UpdateQuestionNumbers();
         }
 
         //Event to handle when question type changes
@@ -85,6 +100,9 @@ namespace TestFormatter.Pages
         {
             // Remove the question from currentExam
             currentExam.DeleteQuestion(deletedQuestion);
+
+            // Update the UI to reflect the new order
+            UpdateQuestionNumbers();
         }
 
         //Go back to landing page
@@ -108,7 +126,7 @@ namespace TestFormatter.Pages
                 MessageBox.Show(validationMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Text File (*.txt)|*.txt",
@@ -121,12 +139,85 @@ namespace TestFormatter.Pages
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ShuffleQuestionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var random = new Random();
+
+            // Shuffle the questions in the currentExam
+            var shuffledQuestions = currentExam.Questions.OrderBy(q => random.Next()).ToList();
+
+            // Update the question numbers in the shuffled list
+            for (int i = 0; i < shuffledQuestions.Count; i++)
+            {
+                shuffledQuestions[i].Number = i + 1; // Assuming question numbers start at 1
+            }
+
+            // Update the existing collection instead of reassigning
+            currentExam.Questions.Clear();
+            foreach (var question in shuffledQuestions)
+            {
+                currentExam.Questions.Add(question);
+            }
+
+            // Update the UI to reflect the new order
+            UpdateQuestionNumbers();
+
+            // Rearrange the QuestionControl objects in the QuestionsPanel
+            UpdateQuestionControlOrder();
+        }
+
+        private void UpdateQuestionControlOrder()
+        {
+            // Locate the Add Question button and temporarily store it
+            Button addQuestionButton = null;
+            foreach (var child in QuestionsPanel.Children)
+            {
+                if (child is Button button && button.Name == "AddQuestionButton")
+                {
+                    addQuestionButton = button;
+                    break;
+                }
+            }
+
+            // Remove the Add Question button if it exists
+            if (addQuestionButton != null)
+            {
+                QuestionsPanel.Children.Remove(addQuestionButton);
+            }
+
+            // Create a dictionary to map questions to their controls
+            var questionControlMap = QuestionsPanel.Children.OfType<QuestionControl>()
+                .ToDictionary(qc => qc.Question);
+
+            // Clear the QuestionsPanel but retain the existing QuestionControl objects
+            QuestionsPanel.Children.Clear();
+
+            // Add controls back in the new order
+            foreach (var question in currentExam.Questions)
+            {
+                if (questionControlMap.TryGetValue(question, out var questionControl))
+                {
+                    QuestionsPanel.Children.Add(questionControl);
+
+                    // Update the UI to reflect the new number
+                    questionControl.UpdateHeaderText();
+                }
+            }
+
+            // Re-add the Add Question button as the last element
+            if (addQuestionButton != null)
+            {
+                QuestionsPanel.Children.Add(addQuestionButton);
+            }
         }
 
     }

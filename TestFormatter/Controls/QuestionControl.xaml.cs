@@ -37,7 +37,7 @@ namespace TestFormatter.Controls
             DataContext = this;
         }
 
-        private void UpdateHeaderText()
+        public void UpdateHeaderText()
         {
             // Set HeaderText based on Question properties (e.g., number and type)
             HeaderText = $"Question #{question.Number}: {question.Type}";
@@ -516,4 +516,5 @@ namespace TestFormatter.Controls
             }
         }
     }
+
 }
