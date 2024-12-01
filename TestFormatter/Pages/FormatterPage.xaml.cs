@@ -218,6 +218,10 @@ namespace TestFormatter.Pages
             {
                 QuestionsPanel.Children.Add(addQuestionButton);
             }
+
+
+            // Update both the question numbers and their headers
+            UpdateQuestionNumbers();
         }
 
     }
