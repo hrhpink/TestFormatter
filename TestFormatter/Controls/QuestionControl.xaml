@@ -15,7 +15,7 @@
 
                     <!--Question Type-->
                     <TextBlock x:Name="QuestionTypeTextBlock" Text="Question Type:" Margin="10 0 10 0" Width="95" VerticalAlignment="Center"/>
-                    <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged">
+                    <ComboBox x:Name="QuestionTypeComboBox" Width="120" SelectionChanged="QuestionTypeComboBox_SelectionChanged" SelectedItem="{Binding Type, Mode=TwoWay}">
                         <ComboBoxItem Content="Free Response" />
                         <ComboBoxItem Content="Multiple Choice" />
                         <ComboBoxItem Content="Matching" />
@@ -32,7 +32,7 @@
                 <!--Question Space-->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <TextBlock x:Name="QuestionTextBlock" Text="Enter Question:" Margin="15 0 10 0" FontSize="12"  Width="96" VerticalAlignment="Center"/>
-                    <TextBox x:Name="QuestionTextBox" Width="364" Height="25" FontSize ="15" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" TextChanged="TextBoxAdjustment_TextChanged"/>
+                    <TextBox x:Name="QuestionTextBox" Width="364" VerticalAlignment="Top" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Auto" MinHeight="30" Height="25" FontSize ="15" TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding QuestionText, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" TextChanged="TextBoxAdjustment_TextChanged"/>
                 </StackPanel>
 
                 <!--Add Image Space-->

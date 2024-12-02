@@ -7,6 +7,7 @@ using TestFormatter.Models;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace TestFormatter.Controls
 {
@@ -23,7 +24,7 @@ namespace TestFormatter.Controls
                 UpdateHeaderText(); // Update header text initially
             }
         }
-        
+
         //Header text property
         public string HeaderText { get; private set; } // Property for the header
 
@@ -37,11 +38,18 @@ namespace TestFormatter.Controls
             DataContext = this;
         }
 
-        public void update_on_load()
+        public void update_on_load(string questionText = "", string questionType = "")
         {
-            // TextChangedEventArgs args = new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None);
-            // TextBoxAdjustment_TextChanged(QuestionTextBox, args);
+            // foreach (ComboBoxItem item in QuestionTypeComboBox.Items)
+            // {
+            //     if (item.Content.ToString().Equals(questionType, StringComparison.OrdinalIgnoreCase))
+            //     {
+            //         QuestionTypeComboBox.SelectedItem = item;
+            //         break;
+            //     }
+            // }
 
+            QuestionTextBox.Text = questionText;
             QuestionTextBox.Measure(new Size(QuestionTextBox.Width, double.PositiveInfinity));
             double wrapAroundHeight = Math.Round((QuestionTextBox.ExtentHeight),0);
             double textboxHeight = QuestionTextBox.Height;
@@ -57,6 +65,7 @@ namespace TestFormatter.Controls
                 QuestionTextBox.Height = textboxHeight - 20;
 
             }
+            QuestionTextBox.UpdateLayout();
         }
 
         private void UpdateHeaderText()

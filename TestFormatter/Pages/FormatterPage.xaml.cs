@@ -27,14 +27,15 @@ namespace TestFormatter.Pages
         //Initialization of Exam class to hold questions
         private Exam currentExam;
 
-        public FormatterPage(Exam exam = null) 
+        public FormatterPage(Exam exam = null, bool newExam = false) 
         {
+            currentExam = exam;
+        
             InitializeComponent();
-            currentExam = exam ?? new Exam();
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam; 
 
-            if(exam != null)
+            if(newExam)
             {
                 manual_load_questions();
             }
@@ -57,6 +58,8 @@ namespace TestFormatter.Pages
                 
                 // Add the new QuestionControl to the Question Panel
                 QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
+
+                questionControl.update_on_load(question.QuestionText, question.Type);
             }
         }
 
