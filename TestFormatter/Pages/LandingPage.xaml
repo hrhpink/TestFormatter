@@ -10,7 +10,7 @@
     <Grid>
         <StackPanel VerticalAlignment="Center">
             <StackPanel Orientation="Horizontal" Margin="10">
-                <Rectangle Width="100" Height="100" Fill="Aqua"/>
+                <Image Width="100" Height="100" Source="/Media/498icon.png"/>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock Text="Welcome to Test Formatter!" Margin ="10 0 0 0" FontSize="40" FontWeight="Bold"/>
                     <TextBlock Text="An easy way to organize your exams-- without all the copy and paste!" Margin="10 0 0 0" FontSize="20"/>
