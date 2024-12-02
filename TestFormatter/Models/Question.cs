@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace TestFormatter.Models
 {
-    public class Question : INotifyPropertyChanged
+    public class Question
     {
         public string QuestionText { get; set; }
         public double Points { get; set; }
@@ -44,12 +44,6 @@ namespace TestFormatter.Models
             {
                 Options = null;
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
