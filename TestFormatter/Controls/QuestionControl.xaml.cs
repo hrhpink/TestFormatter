@@ -23,7 +23,7 @@ namespace TestFormatter.Controls
                 UpdateHeaderText(); // Update header text initially
             }
         }
-
+        
         //Header text property
         public string HeaderText { get; private set; } // Property for the header
 
@@ -35,6 +35,28 @@ namespace TestFormatter.Controls
         {
             InitializeComponent();
             DataContext = this;
+        }
+
+        public void update_on_load()
+        {
+            // TextChangedEventArgs args = new TextChangedEventArgs(TextBox.TextChangedEvent, UndoAction.None);
+            // TextBoxAdjustment_TextChanged(QuestionTextBox, args);
+
+            QuestionTextBox.Measure(new Size(QuestionTextBox.Width, double.PositiveInfinity));
+            double wrapAroundHeight = Math.Round((QuestionTextBox.ExtentHeight),0);
+            double textboxHeight = QuestionTextBox.Height;
+
+            // Check if the content overflows or wraps onto a new line
+            if (wrapAroundHeight > textboxHeight)
+            {
+                // Add padding only if a new line is needed
+                QuestionTextBox.Height = textboxHeight + 20;
+            }
+            else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 18))
+            {
+                QuestionTextBox.Height = textboxHeight - 20;
+
+            }
         }
 
         private void UpdateHeaderText()

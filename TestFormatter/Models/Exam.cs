@@ -179,7 +179,7 @@ namespace TestFormatter.Models
             File.WriteAllText(filePath, jsonContent);
         }
         // INotifyPropertyChanged implementation
-        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {

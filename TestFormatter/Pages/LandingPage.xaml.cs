@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Text.Json;
 using TestFormatter.Models;
 using Microsoft.Win32;
+using TestFormatter.Controls;
 
 namespace TestFormatter.Pages
 {
@@ -88,31 +89,6 @@ namespace TestFormatter.Pages
                     MessageBox.Show($"An error occurred while loading the file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-
-            // OpenFileDialog openFileDialog = new OpenFileDialog
-            // {
-            //     Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
-            //     Title = "Open Test File"
-            // };
-
-            // if (openFileDialog.ShowDialog() == true)
-            // {
-            //     try
-            //     {
-            //         Exam loadedExam = LoadFromJson(openFileDialog.FileName);
-
-            //         // Update the application state
-            //         exam.ExamTitle = loadedExam.ExamTitle;
-            //         exam.Questions.Clear();
-            //         exam.Questions.AddRange(loadedExam.Questions);
-
-            //         MessageBox.Show("Test loaded successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         MessageBox.Show($"Error loading test: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            //     }
-            // }
         }
     }
 }

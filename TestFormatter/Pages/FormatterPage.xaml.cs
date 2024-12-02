@@ -33,6 +33,31 @@ namespace TestFormatter.Pages
             currentExam = exam ?? new Exam();
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam; 
+
+            if(exam != null)
+            {
+                manual_load_questions();
+            }
+        }
+
+        public void manual_load_questions()
+        {
+            foreach(Question question in currentExam.Questions)
+            {
+                var questionControl = new QuestionControl
+                {
+                    Question = question
+                };
+
+                // Subscribe to the QuestionTypeChanged event
+                questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
+
+                // Subscribe to the QuestionDeleted event
+                questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
+                
+                // Add the new QuestionControl to the Question Panel
+                QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
+            }
         }
 
         //Add Questions code
@@ -64,6 +89,9 @@ namespace TestFormatter.Pages
             // Subscribe to the QuestionDeleted event
             questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
 
+            // update questionControl
+            questionControl.update_on_load();
+            
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
 

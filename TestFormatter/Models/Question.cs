@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,7 +8,7 @@ using System.Windows.Media.Imaging;
 
 namespace TestFormatter.Models
 {
-    public class Question
+    public class Question : INotifyPropertyChanged
     {
         public string QuestionText { get; set; }
         public double Points { get; set; }
@@ -43,6 +44,12 @@ namespace TestFormatter.Models
             {
                 Options = null;
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
