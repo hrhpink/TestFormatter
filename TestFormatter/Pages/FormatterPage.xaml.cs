@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using TestFormatter.Controls;
 using TestFormatter.Models;
 using Microsoft.Win32;
+using System.IO;
 using System.ComponentModel;
 
 namespace TestFormatter.Pages

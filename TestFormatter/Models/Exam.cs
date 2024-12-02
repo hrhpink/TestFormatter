@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Text.Json;
 using System.ComponentModel;
 using System.Printing.IndexedProperties;
 using System.Text.Json;
@@ -186,5 +187,15 @@ namespace TestFormatter.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void ExportToJsonFile(Exam exam, string filePath)
+        {
+            string jsonContent = JsonSerializer.Serialize(exam, new JsonSerializerOptions
+            {
+                WriteIndented = true // Makes the JSON more readable
+            });
+
+            // Save JSON to the specified file path
+            File.WriteAllText(filePath, jsonContent);
+        }
     }
 }
