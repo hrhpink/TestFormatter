@@ -36,7 +36,7 @@ namespace TestFormatter.Pages
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam; 
 
-            if(newExam)
+            if(newExam == true)
             {
                 manual_load_questions();
             }

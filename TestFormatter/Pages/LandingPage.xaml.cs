@@ -38,7 +38,7 @@ namespace TestFormatter.Pages
             win2.ShowDialog();
        
             //Navigate to formatter
-            this.NavigationService.Navigate(new FormatterPage(new Exam(), false));
+            this.NavigationService.Navigate(new FormatterPage(new Exam()));
         }
 
         private void LoadExam_Click(object sender, RoutedEventArgs e)
@@ -76,7 +76,7 @@ namespace TestFormatter.Pages
                         };
 
                         // Navigate to formatter
-                        this.NavigationService.Navigate(new FormatterPage(loadedExam), true);
+                        this.NavigationService.Navigate(new FormatterPage(loadedExam, true));
                     }
                     else
                     {
