@@ -469,19 +469,19 @@ namespace TestFormatter.Controls
                 int currentIndex = parentPanel.Children.IndexOf(this);
                 if (currentIndex > 0) // Ensure it's not the first question
                 {
-                    // Swap the QuestionControl positions
-                    parentPanel.Children.RemoveAt(currentIndex);
-                    parentPanel.Children.Insert(currentIndex - 1, this);
-
-                    // Swap the numbers
                     var previousControl = parentPanel.Children[currentIndex - 1] as QuestionControl;
                     if (previousControl != null)
                     {
+                        // Swap the Question objects' numbers
                         int tempNumber = this.Question.Number;
                         this.Question.Number = previousControl.Question.Number;
                         previousControl.Question.Number = tempNumber;
 
-                        // Update header texts
+                        // Swap the QuestionControl positions
+                        parentPanel.Children.RemoveAt(currentIndex);
+                        parentPanel.Children.Insert(currentIndex - 1, this);
+
+                        // Update UI
                         this.UpdateHeaderText();
                         previousControl.UpdateHeaderText();
                     }
@@ -496,19 +496,19 @@ namespace TestFormatter.Controls
                 int currentIndex = parentPanel.Children.IndexOf(this);
                 if (currentIndex < parentPanel.Children.Count - 1) // Ensure it's not the last question
                 {
-                    // Swap the QuestionControl positions
                     var nextControl = parentPanel.Children[currentIndex + 1] as QuestionControl;
-                    parentPanel.Children.RemoveAt(currentIndex + 1);
-                    parentPanel.Children.Insert(currentIndex, nextControl);
-
-                    // Swap the numbers
                     if (nextControl != null)
                     {
+                        // Swap the Question objects' numbers
                         int tempNumber = this.Question.Number;
                         this.Question.Number = nextControl.Question.Number;
                         nextControl.Question.Number = tempNumber;
 
-                        // Update header texts
+                        // Swap the QuestionControl positions
+                        parentPanel.Children.RemoveAt(currentIndex + 1);
+                        parentPanel.Children.Insert(currentIndex, nextControl);
+
+                        // Update UI
                         this.UpdateHeaderText();
                         nextControl.UpdateHeaderText();
                     }
