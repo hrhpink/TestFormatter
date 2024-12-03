@@ -17,6 +17,9 @@ using TestFormatter.Models;
 using Microsoft.Win32;
 using System.IO;
 using System.ComponentModel;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using System.Diagnostics;
 
 namespace TestFormatter.Pages
 {
@@ -160,18 +163,25 @@ namespace TestFormatter.Pages
                 return;
             }
             
+            bool hasImages = currentExam.Questions.Any(q => q.QuestionImage != null);
+
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "Text File (*.txt)|*.txt",
-                Title = "Export Exam Questions"
+                Filter = hasImages ? "PDF files (*.pdf)|*.pdf" : "Text files (*.txt)|*.txt"
             };
+
+            // Show the SaveFileDialog and check if the user selected a file
             if (saveFileDialog.ShowDialog() == true)
             {
-                // Assuming 'exam' is an instance of your Exam class
-                currentExam.ExportToTextFile(saveFileDialog.FileName);
+                // Get the file path selected by the user
+                string filePath = saveFileDialog.FileName;
+
+                // Assuming 'exam' is the instance of the Exam class in the current context
+                currentExam.ExportToPdf(saveFileDialog.FileName);
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+        
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
 

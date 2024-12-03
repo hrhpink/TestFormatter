@@ -7,6 +7,8 @@ using System.IO;
 using System.Text.Json;
 using System.ComponentModel;
 using System.Printing.IndexedProperties;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
 
 namespace TestFormatter.Models
 {
@@ -101,72 +103,193 @@ namespace TestFormatter.Models
             validationMessage = ""; // No issues
             return true;
         }
-        public void ExportToTextFile(string filePath)
+
+        public void ExportToPdf(string filePath)
+        {
+            // Create a new PDF document
+            PdfDocument document = new PdfDocument();
+            document.Info.Title = "Exam Questions";
+
+            // Add a page to the document
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont font = new XFont("Verdana", 12);
+            XFont boldFont = new XFont("Verdana", 12);
+
+            double yPosition = 20; // Starting Y position for the first line
+
+            if (IncludeNameField)
             {
-                StringBuilder sb = new StringBuilder();
+                gfx.DrawString("Name: ________________________", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 20;
+            }
+            if (IncludeDateField)
+            {
+                gfx.DrawString("Date: __/__/____", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 20;
+            }
 
-                if (IncludeNameField == true)
+            // Include Class field if enabled
+            if (IncludeClassField)
+            {
+                gfx.DrawString("Class: ___________", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 20;
+            }
+
+            // Include Section field if enabled
+            if (IncludeSectionField)
+            {
+                gfx.DrawString("Section: ___________", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 20;
+            }
+
+            // Include Grade field if enabled
+            if (IncludeGradeField)
+            {
+                if (NumberOfPoints > 0)
                 {
-                    sb.AppendLine($"Name: _____________________________");
+                    gfx.DrawString($"Grade: ___/{NumberOfPoints}", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                }
+                else
+                {
+                    gfx.DrawString("Grade: ___/___", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                }
+                yPosition += 20;
+            }
+
+            foreach (var question in Questions)
+            {
+                // Add question number and points
+                gfx.DrawString($"Question {Questions.IndexOf(question) + 1}", boldFont, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 20;
+
+                gfx.DrawString($"({question.Points} points) {question.QuestionText}", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 20;
+                
+                if (question.QuestionImage != null)
+                {
+                    // Load and get the image
+                    XImage image = XImage.FromFile(question.QuestionImage.UriSource.LocalPath);
+
+                    // Define the maximum size for the image
+                    double maxWidth = page.Width - 40; // Subtracting margins
+                    double maxHeight = page.Height - 100; // Adjust as needed
+
+                    // Calculate the scale factor to fit the image within the bounds
+                    double scaleFactor = Math.Min(maxWidth / image.PixelWidth, maxHeight / image.PixelHeight);
+
+                    // Calculate the scaled width and height
+                    double scaledWidth = image.PixelWidth * scaleFactor;
+                    double scaledHeight = image.PixelHeight * scaleFactor;
+
+                    // Draw the scaled image
+                    gfx.DrawImage(image, 20, yPosition, scaledWidth, scaledHeight);
+
+                    // Update the yPosition after the image
+                    yPosition += scaledHeight + 20; // Adjust for the next content
+                }
+                // If the question is Multiple Choice, display the options
+                if (question.Type == "Multiple Choice")
+                {
+                    for (int i = 0; i < question.Options.Count; i++)
+                    {
+                        gfx.DrawString($"{i + 1}. {question.Options[i]}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
+                        yPosition += 20;
+                    }
+                }
+                else
+                {
+                    // Otherwise, display blank lines as placeholders
+                    for (int i = 0; i < question.NumLines; i++)
+                    {
+                        gfx.DrawString(new string('_', 80), font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0)); // Placeholder line
+                        yPosition += 20;
+                    }
+                }
+
+                // Add a separator between questions
+                yPosition += 10;  // Adjust the gap between questions
+                gfx.DrawString(new string('-', 40), font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
+                yPosition += 30; // Add space after the separator
+
+                // Check if we need to create a new page (if the content overflows)
+                if (yPosition > page.Height - 50)
+                {
+                    page = document.AddPage();
+                    gfx = XGraphics.FromPdfPage(page);
+                    yPosition = 20; // Reset yPosition for the new page
+                }
+            }
+
+            // Save the document to the file path chosen by the user
+            document.Save(filePath);
+        }        
+        public void ExportToTextFile(string filePath)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (IncludeNameField == true)
+            {
+                sb.AppendLine($"Name: _____________________________");
+                sb.AppendLine("\n");
+            }
+            if (IncludeIDField == true)
+            {
+                sb.AppendLine($"ID: ________________");
                     sb.AppendLine("\n");
-                }
-                if (IncludeIDField == true)
+            }
+            if (IncludeDateField == true)
+            {
+                sb.AppendLine($"Date: __/__/____");
+                    sb.AppendLine("\n");
+            }
+            if (IncludeClassField == true)
+            {
+                sb.AppendLine($"Class: ___________");
+                    sb.AppendLine("\n");
+            }
+            if (IncludeSectionField == true)
+            {
+                sb.AppendLine($"Section: ___________");
+                    sb.AppendLine("\n");
+            }
+            if (IncludeGradeField == true)
+            {
+                if (NumberOfPoints > 0)
                 {
-                    sb.AppendLine($"ID: ________________");
-                     sb.AppendLine("\n");
+                    sb.AppendLine($"Grade: ___/{NumberOfPoints}");
+                        sb.AppendLine("\n");
                 }
-                if (IncludeDateField == true)
+                else
                 {
-                    sb.AppendLine($"Date: __/__/____");
-                     sb.AppendLine("\n");
+                    sb.AppendLine($"Grade: ___/___");
+                        sb.AppendLine("\n");
                 }
-                if (IncludeClassField == true)
-                {
-                    sb.AppendLine($"Class: ___________");
-                     sb.AppendLine("\n");
-                }
-                if (IncludeSectionField == true)
-                {
-                    sb.AppendLine($"Section: ___________");
-                     sb.AppendLine("\n");
-                }
-                if (IncludeGradeField == true)
-                {
-                    if (NumberOfPoints > 0)
-                    {
-                        sb.AppendLine($"Grade: ___/{NumberOfPoints}");
-                         sb.AppendLine("\n");
-                    }
-                    else
-                    {
-                        sb.AppendLine($"Grade: ___/___");
-                         sb.AppendLine("\n");
-                    }
-                }
+            }
 
-                for (int j = 0; j < Questions.Count; j++)
+            for (int j = 0; j < Questions.Count; j++)
+            {
+                Question question = Questions[j];
+                sb.AppendLine($"Question {j+1}");
+                sb.AppendLine($"({question.Points} points) {question.QuestionText}");
+                if (question.Type == "Multiple Choice")
                 {
-                    Question question = Questions[j];
-                    sb.AppendLine($"Question {j+1}");
-                    sb.AppendLine($"({question.Points} points) {question.QuestionText}");
-                    if (question.Type == "Multiple Choice")
+                    for (int i = 0; i < question.Options.Count; i++)
                     {
-                        for (int i = 0; i < question.Options.Count; i++)
-                        {
-                            sb.AppendLine($"{i + 1}. {question.Options[i]}");
-                        }
+                        sb.AppendLine($"{i + 1}. {question.Options[i]}");
                     }
-                    else
-                    {
-                        for (int i = 0; i < question.NumLines; i++)
-                        {
-                            sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
-                        }
-                    }
-                    sb.AppendLine(new string('-', 40));  // Separator between questions
-
                 }
-                File.WriteAllText(filePath, sb.ToString());
+                else
+                {
+                    for (int i = 0; i < question.NumLines; i++)
+                    {
+                        sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
+                    }
+                }
+                sb.AppendLine(new string('-', 40));  // Separator between questions
+
+            }
+            File.WriteAllText(filePath, sb.ToString());
         }
         public void ExportToJsonFile(Exam exam, string filePath)
         {
