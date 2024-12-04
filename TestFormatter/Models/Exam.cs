@@ -146,7 +146,7 @@ namespace TestFormatter.Models
                 for (int j = 0; j < Questions.Count; j++)
                 {
                     Question question = Questions[j];
-                    sb.AppendLine($"Question {j+1}");
+                    sb.AppendLine($"Question {question.Number}");
                     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
                     if (question.Type == "Multiple Choice")
                     {

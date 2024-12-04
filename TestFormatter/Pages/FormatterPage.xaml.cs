@@ -68,7 +68,8 @@ namespace TestFormatter.Pages
             // Create a new instance of QuestionControl and set its Question property
             var questionControl = new QuestionControl
             {
-                Question = newQuestion
+                Question = newQuestion,
+                ParentFormatterPage = this
             };
 
             // Subscribe to the QuestionTypeChanged event
@@ -76,6 +77,9 @@ namespace TestFormatter.Pages
 
             // Subscribe to the QuestionDeleted event
             questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
+
+            // Subscribe to up and down arrow event
+            // questionControl.ArrowClicked += swap_questions;
 
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
@@ -146,6 +150,22 @@ namespace TestFormatter.Pages
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void swap_questions(int currentIndex, bool up_arrow)
+        {
+            if (up_arrow)
+            {
+                Question tempQuestion = currentExam.Questions[currentIndex];
+                currentExam.Questions[currentIndex] = currentExam.Questions[currentIndex - 1];
+                currentExam.Questions[currentIndex - 1] = tempQuestion;
+            }
+            else
+            {
+                Question tempQuestion = currentExam.Questions[currentIndex + 1];
+                currentExam.Questions[currentIndex + 1] = currentExam.Questions[currentIndex];
+                currentExam.Questions[currentIndex] = tempQuestion;
+            }
         }
 
         private void ShuffleQuestionsButton_Click(object sender, RoutedEventArgs e)

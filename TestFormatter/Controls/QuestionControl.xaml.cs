@@ -7,6 +7,7 @@ using TestFormatter.Models;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using TestFormatter.Pages;
 
 namespace TestFormatter.Controls
 {
@@ -26,6 +27,7 @@ namespace TestFormatter.Controls
 
         //Header text property
         public string HeaderText { get; private set; } // Property for the header
+        public FormatterPage? ParentFormatterPage { get; set; }
 
         //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion / Num change)
         public event EventHandler<Question> QuestionTypeChanged;
@@ -476,6 +478,8 @@ namespace TestFormatter.Controls
                         int tempNumber = this.Question.Number;
                         this.Question.Number = previousControl.Question.Number;
                         previousControl.Question.Number = tempNumber;
+
+                        ParentFormatterPage.swap_questions(currentIndex, true);
 
                         // Swap the QuestionControl positions
                         parentPanel.Children.RemoveAt(currentIndex);
