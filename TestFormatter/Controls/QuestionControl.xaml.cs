@@ -72,10 +72,11 @@ namespace TestFormatter.Controls
                     loadedQuestion.Options = new List<string>();
                 }
 
-                // Add options to the UI
+                // Populate the Options list and UI dynamically
                 foreach (var option in loadedQuestion.Options)
                 {
-                    AddOption(option); // Dynamically add each option
+                    Question.Options.Add(option); // Add to the backend list
+                    AddOption(option); // Add to the UI
                 }
             }
             else if (loadedQuestion.Type == "Matching" && loadedQuestion.Matching != null)
