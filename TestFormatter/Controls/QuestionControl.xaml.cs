@@ -508,6 +508,8 @@ namespace TestFormatter.Controls
                         this.Question.Number = nextControl.Question.Number;
                         nextControl.Question.Number = tempNumber;
 
+                        ParentFormatterPage.swap_questions(currentIndex, false);
+
                         // Swap the QuestionControl positions
                         parentPanel.Children.RemoveAt(currentIndex + 1);
                         parentPanel.Children.Insert(currentIndex, nextControl);
