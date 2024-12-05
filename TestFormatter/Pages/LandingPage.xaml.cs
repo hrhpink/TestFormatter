@@ -56,5 +56,7 @@ namespace TestFormatter.Pages
 
             }
         }
+
+        public static string FileName = "";
     }
 }

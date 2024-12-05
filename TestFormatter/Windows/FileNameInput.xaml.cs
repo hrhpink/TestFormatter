@@ -12,12 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TestFormatter.Pages;
 
 namespace TestFormatter.Windows
 {
     /// <summary>
     /// Interaction logic for FileNameInput.xaml
     /// </summary>
+    /// 
+
+
+
     public partial class FileNameInput : Window
     {
         public FileNameInput()
@@ -26,19 +31,19 @@ namespace TestFormatter.Windows
             DataContext = this;
         }
 
-        private string _fileName;
-        public string fileName
+        private string fileNameInputText = "";
+        public string FileNameInputText
         {
-            get { return _fileName; }
+            get { return fileNameInputText; }
             set { 
-                _fileName = value;
+                fileNameInputText = value;
             }
-            //TODO: store file name somewhere so program can access it globally
-            //OR do this in LandingPage.xaml.cs
         }
+
 
         private void ConfirmName_Click(object sender, RoutedEventArgs e)
         {
+            TestFormatter.Pages.LandingPage.FileName = FileNameInputText;
             this.Close();
         }
     }

@@ -17,6 +17,7 @@ using TestFormatter.Models;
 using Microsoft.Win32;
 using System.IO;
 using System.ComponentModel;
+using TestFormatter.Windows;
 
 namespace TestFormatter.Pages
 {
@@ -34,6 +35,7 @@ namespace TestFormatter.Pages
 
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam;
+            currentExam.FileName = LandingPage.FileName;
         }
 
         private void UpdateQuestionNumbers()
@@ -130,7 +132,8 @@ namespace TestFormatter.Pages
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Json File (*.json)|*.json",
-                Title = "Save Exam Questions"
+                Title = "Save Exam Questions",
+                FileName = currentExam.FileName
             };
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -154,7 +157,8 @@ namespace TestFormatter.Pages
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Text File (*.txt)|*.txt",
-                Title = "Export Exam Questions"
+                Title = "Export Exam Questions",
+                FileName = currentExam.FileName
             };
             if (saveFileDialog.ShowDialog() == true)
             {

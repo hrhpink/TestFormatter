@@ -191,7 +191,8 @@ namespace TestFormatter.Controls
                         Height = 150,
                         Margin = new Thickness(0, 5, 5, 5),
                         AcceptsReturn = true,
-                        TextWrapping = TextWrapping.Wrap
+                        TextWrapping = TextWrapping.Wrap,
+                        VerticalScrollBarVisibility = ScrollBarVisibility.Visible
                     };
 
                     // Right vertical panel for matching options
@@ -218,7 +219,8 @@ namespace TestFormatter.Controls
                         Height = 150,
                         Margin = new Thickness(0, 5, 5, 5),
                         AcceptsReturn = true,
-                        TextWrapping = TextWrapping.Wrap
+                        TextWrapping = TextWrapping.Wrap,
+                        VerticalScrollBarVisibility = ScrollBarVisibility.Visible
                     };
 
                     // Update Matching[0] with new lines in matchingTextBox1
@@ -326,7 +328,8 @@ namespace TestFormatter.Controls
                         Height = 150,
                         Margin = new Thickness(5),
                         AcceptsReturn = true,
-                        TextWrapping = TextWrapping.Wrap
+                        TextWrapping = TextWrapping.Wrap,
+                        VerticalScrollBarVisibility = ScrollBarVisibility.Visible
                     };
 
                     // Update Matching[0] with new lines in matchingTextBox1

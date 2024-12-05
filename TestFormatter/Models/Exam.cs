@@ -28,6 +28,8 @@ namespace TestFormatter.Models
 
         public int QuestionCount => Questions.Count; // Property to track number of questions
 
+        public string FileName { get; set; }
+
         public void AddQuestion(Question question)
         {
             Questions.Add(question);
