@@ -47,25 +47,24 @@ namespace TestFormatter.Pages
 
         public void manual_load_questions()
         {
-            foreach(Question question in currentExam.Questions)
+            foreach (Question question in currentExam.Questions)
             {
-                var questionControl = new QuestionControl
-                {
-                    Question = question
-                };
+                var questionControl = new QuestionControl();
+
+                // Initialize the control with the question data
+                questionControl.Initialize(question);
 
                 // Subscribe to the QuestionTypeChanged event
                 questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
 
                 // Subscribe to the QuestionDeleted event
                 questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
-                
+
                 // Add the new QuestionControl to the Question Panel
                 QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
-
-                questionControl.update_on_load(question.QuestionText, question.Type);
             }
         }
+
 
         //Add Questions code
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
@@ -80,25 +79,24 @@ namespace TestFormatter.Pages
                 return; // Exit without adding a new question
             }
 
-            // Create a new FreeResponseQuestion by default
-            var newQuestion = new Question();
+            // Create a new Free Response Question by default
+            var newQuestion = new Question
+            {
+                Type = "Free Response", // Default type
+                QuestionText = "",
+                Points = 1,
+                NumLines = 1 // Default number of lines for Free Response
+            };
             currentExam.AddQuestion(newQuestion);
 
-            // Create a new instance of QuestionControl and set its Question property
-            var questionControl = new QuestionControl
-            {
-                Question = newQuestion
-            };
+            // Create a new QuestionControl and initialize it
+            var questionControl = new QuestionControl();
+            questionControl.Initialize(newQuestion);
 
-            // Subscribe to the QuestionTypeChanged event
+            // Subscribe to the QuestionTypeChanged and QuestionDeleted events
             questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
-
-            // Subscribe to the QuestionDeleted event
             questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
 
-            // update questionControl
-            questionControl.update_on_load();
-            
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
 

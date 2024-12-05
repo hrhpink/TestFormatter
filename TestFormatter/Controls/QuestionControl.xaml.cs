@@ -38,6 +38,112 @@ namespace TestFormatter.Controls
             DataContext = this;
         }
 
+        public void Initialize(Question loadedQuestion)
+        {
+            // Set the Question property
+            Question = loadedQuestion;
+
+            // Update the header text
+            UpdateHeaderText();
+
+            // Set the basic fields
+            QuestionTextBox.Text = loadedQuestion.QuestionText;
+            PointsTextBox.Text = loadedQuestion.Points.ToString();
+
+            // Set the ComboBox selection and trigger the event
+            foreach (ComboBoxItem item in QuestionTypeComboBox.Items)
+            {
+                if (item.Content.ToString() == loadedQuestion.Type)
+                {
+                    QuestionTypeComboBox.SelectedItem = item;
+
+                    // Manually trigger the SelectionChanged event
+                    QuestionTypeComboBox_SelectionChanged(QuestionTypeComboBox, null);
+                    break;
+                }
+            }
+
+            // Populate additional fields based on the question type
+            if (loadedQuestion.Type == "Multiple Choice" && loadedQuestion.Options != null)
+            {
+                // Clear any existing options in the Question object
+                if (loadedQuestion.Options == null)
+                {
+                    loadedQuestion.Options = new List<string>();
+                }
+
+                // Add options to the UI
+                foreach (var option in loadedQuestion.Options)
+                {
+                    AddOption(option); // Dynamically add each option
+                }
+            }
+            else if (loadedQuestion.Type == "Matching" && loadedQuestion.Matching != null)
+            {
+                var (questions, options) = loadedQuestion.Matching;
+                // Populate matching fields
+            }
+            else if (loadedQuestion.Type == "True/False" && loadedQuestion.TrueOrFalse != null)
+            {
+                // Populate True/False fields
+            }
+        }
+
+        private void AddOption(string optionText)
+        {
+            StackPanel optionPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(106, 0, 5, 5)
+            };
+
+            TextBox optionTextBox = new TextBox
+            {
+                Height = 25,
+                Width = 300,
+                Margin = new Thickness(5),
+                AcceptsReturn = true,
+                TextWrapping = TextWrapping.Wrap,
+                Text = optionText // Prepopulate with the option text
+            };
+
+            // Update the Options list when the text changes
+            optionTextBox.LostFocus += (s, args) =>
+            {
+                int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
+                if (index >= 0 && index < question.Options.Count)
+                {
+                    question.Options[index] = optionTextBox.Text; // Update existing option
+                }
+            };
+
+            Button deleteButton = new Button
+            {
+                Content = "❌",
+                Margin = new Thickness(5)
+            };
+            deleteButton.Click += (s, args) =>
+            {
+                int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
+
+                if (positionOfOption >= 0 && positionOfOption < question.Options.Count)
+                {
+                    AdditionalOptionsPanel.Children.Remove(optionPanel);
+                    question.Options.RemoveAt(positionOfOption); // Remove from options list
+                }
+            };
+
+            optionPanel.Children.Add(optionTextBox);
+            optionPanel.Children.Add(deleteButton);
+
+            AdditionalOptionsPanel.Children.Add(optionPanel);
+        }
+
+
+
+
+
         public void update_on_load(string questionText = "", string questionType = "")
         {
             // foreach (ComboBoxItem item in QuestionTypeComboBox.Items)
@@ -169,6 +275,15 @@ namespace TestFormatter.Controls
                     };
                     addOptionButton.Click += AddOptionButton_Click;
                     AddOptionButton.Children.Add(addOptionButton);
+
+                    // Load existing options
+                    if (question.Options != null)
+                    {
+                        foreach (var option in question.Options)
+                        {
+                            AddOption(option);
+                        }
+                    }
                 }
                  ////////////
                 //Matching//
