@@ -144,8 +144,9 @@ namespace TestFormatter.Models
                     }
                 }
 
-                foreach (var question in Questions)
+                for (int j = 0; j < Questions.Count; j++)
                 {
+                    Question question = Questions[j];
                     sb.AppendLine($"Question {question.Number}");
                     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
                     if (question.Type == "Multiple Choice")
@@ -162,8 +163,27 @@ namespace TestFormatter.Models
                             sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
                         }
                     }
-                    sb.AppendLine(new string('-', 40));  // Separator between questions
                 }
+                // foreach (var question in Questions)
+                // {
+                //     sb.AppendLine($"Question {question.Number}");
+                //     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
+                //     if (question.Type == "Multiple Choice")
+                //     {
+                //         for (int i = 0; i < question.Options.Count; i++)
+                //         {
+                //             sb.AppendLine($"{i + 1}. {question.Options[i]}");
+                //         }
+                //     }
+                //     else
+                //     {
+                //         for (int i = 0; i < question.NumLines; i++)
+                //         {
+                //             sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
+                //         }
+                //     }
+                //     sb.AppendLine(new string('-', 40));  // Separator between questions
+                // }
                 File.WriteAllText(filePath, sb.ToString());
         }
         // INotifyPropertyChanged implementation

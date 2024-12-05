@@ -7,6 +7,7 @@ using TestFormatter.Models;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using TestFormatter.Pages;
 
 namespace TestFormatter.Controls
 {
@@ -26,6 +27,7 @@ namespace TestFormatter.Controls
 
         //Header text property
         public string HeaderText { get; private set; } // Property for the header
+        public FormatterPage? ParentFormatterPage { get; set; }
 
         //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion / Num change)
         public event EventHandler<Question> QuestionTypeChanged;
@@ -37,7 +39,7 @@ namespace TestFormatter.Controls
             DataContext = this;
         }
 
-        private void UpdateHeaderText()
+        public void UpdateHeaderText()
         {
             // Set HeaderText based on Question properties (e.g., number and type)
             HeaderText = $"Question #{question.Number}: {question.Type}";
@@ -463,9 +465,62 @@ namespace TestFormatter.Controls
 
         private void UpArrowButton_Click(object sender, RoutedEventArgs e)
         {
+            var parentPanel = this.Parent as Panel;
+            if (parentPanel != null)
+            {
+                int currentIndex = parentPanel.Children.IndexOf(this);
+                if (currentIndex > 0) // Ensure it's not the first question
+                {
+                    var previousControl = parentPanel.Children[currentIndex - 1] as QuestionControl;
+                    if (previousControl != null)
+                    {
+                        // Swap the Question objects' numbers
+                        int tempNumber = this.Question.Number;
+                        this.Question.Number = previousControl.Question.Number;
+                        previousControl.Question.Number = tempNumber;
+
+                        ParentFormatterPage.swap_questions(currentIndex, true);
+
+                        // Swap the QuestionControl positions
+                        parentPanel.Children.RemoveAt(currentIndex);
+                        parentPanel.Children.Insert(currentIndex - 1, this);
+
+                        // Update UI
+                        this.UpdateHeaderText();
+                        previousControl.UpdateHeaderText();
+                    }
+                }
+            }
         }
         private void DownArrowButton_Click(object sender, RoutedEventArgs e)
         {
+            var parentPanel = this.Parent as Panel;
+            if (parentPanel != null)
+            {
+                int currentIndex = parentPanel.Children.IndexOf(this);
+                if (currentIndex < parentPanel.Children.Count - 1) // Ensure it's not the last question
+                {
+                    var nextControl = parentPanel.Children[currentIndex + 1] as QuestionControl;
+                    if (nextControl != null)
+                    {
+                        // Swap the Question objects' numbers
+                        int tempNumber = this.Question.Number;
+                        this.Question.Number = nextControl.Question.Number;
+                        nextControl.Question.Number = tempNumber;
+
+                        ParentFormatterPage.swap_questions(currentIndex, false);
+
+                        // Swap the QuestionControl positions
+                        parentPanel.Children.RemoveAt(currentIndex + 1);
+                        parentPanel.Children.Insert(currentIndex, nextControl);
+
+                        // Update UI
+                        this.UpdateHeaderText();
+                        nextControl.UpdateHeaderText();
+                    }
+                }
+            }
         }
     }
+
 }
