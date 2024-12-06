@@ -22,11 +22,10 @@ namespace TestFormatter.Models
         public bool IncludeClassField { get; set; }
         public bool IncludeSectionField { get; set; }
         public bool IncludeGradeField { get; set; }
-
         public int QuestionLimit { get; set; } = 0; //Default limit (0 means no limit)
         public double NumberOfPoints { get; set; }
-
         public int QuestionCount => Questions.Count; // Property to track number of questions
+        public string FileName { get; set; }
 
         public Exam(List<Question>? questions = null)
         {
@@ -35,6 +34,7 @@ namespace TestFormatter.Models
                 Questions = questions;
             }
         }
+
         public void AddQuestion(Question question)
         {
             Questions.Add(question);

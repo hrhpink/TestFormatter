@@ -8,7 +8,7 @@
         Height="100" Width="275" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Horizontal">
         <TextBlock Text="File Name:" Height="15" Margin="5"/>
-        <TextBox Width="130" Height="20" Text="{Binding Path=fileName}"/>
+        <TextBox Width="130" Height="20" Text="{Binding Path=FileNameInputText}"/>
         <Button Name="ConfirmName" Content="Confirm" Width="50" Height="20" Margin="5" Click="ConfirmName_Click" />
     </StackPanel>
 </Window>

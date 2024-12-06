@@ -17,6 +17,7 @@ using TestFormatter.Models;
 using Microsoft.Win32;
 using System.IO;
 using System.ComponentModel;
+using TestFormatter.Windows;
 using PdfSharp.Pdf;
 using PdfSharp.Drawing;
 using System.Diagnostics;
@@ -38,6 +39,9 @@ namespace TestFormatter.Pages
             InitializeComponent();
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam;
+            
+            currentExam.FileName = LandingPage.FileName;
+
 
             if(newExam == true)
             {
@@ -165,7 +169,8 @@ namespace TestFormatter.Pages
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Json File (*.json)|*.json",
-                Title = "Save Exam Questions"
+                Title = "Save Exam Questions",
+                FileName = currentExam.FileName
             };
             if (saveFileDialog.ShowDialog() == true)
             {
@@ -190,7 +195,12 @@ namespace TestFormatter.Pages
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
+
+                Filter = "Text File (*.txt)|*.txt",
+                Title = "Export Exam Questions",
+                FileName = currentExam.FileName
                 Filter = hasImages ? "PDF files (*.pdf)|*.pdf" : "Text files (*.txt)|*.txt"
+
             };
 
             // Show the SaveFileDialog and check if the user selected a file
