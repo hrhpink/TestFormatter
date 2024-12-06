@@ -267,29 +267,47 @@ namespace TestFormatter.Models
                 }
             }
 
-            for (int j = 0; j < Questions.Count; j++)
-            {
-                Question question = Questions[j];
-                sb.AppendLine($"Question {j+1}");
-                sb.AppendLine($"({question.Points} points) {question.QuestionText}");
-                if (question.Type == "Multiple Choice")
+                for (int j = 0; j < Questions.Count; j++)
                 {
-                    for (int i = 0; i < question.Options.Count; i++)
+                    Question question = Questions[j];
+                    sb.AppendLine($"Question {question.Number}");
+                    sb.AppendLine($"({question.Points} points) {question.QuestionText}");
+                    if (question.Type == "Multiple Choice")
                     {
-                        sb.AppendLine($"{i + 1}. {question.Options[i]}");
+                        for (int i = 0; i < question.Options.Count; i++)
+                        {
+                            sb.AppendLine($"{i + 1}. {question.Options[i]}");
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < question.NumLines; i++)
+                        {
+                            sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
+                        }
                     }
                 }
-                else
-                {
-                    for (int i = 0; i < question.NumLines; i++)
-                    {
-                        sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
-                    }
-                }
-                sb.AppendLine(new string('-', 40));  // Separator between questions
-
-            }
-            File.WriteAllText(filePath, sb.ToString());
+                // foreach (var question in Questions)
+                // {
+                //     sb.AppendLine($"Question {question.Number}");
+                //     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
+                //     if (question.Type == "Multiple Choice")
+                //     {
+                //         for (int i = 0; i < question.Options.Count; i++)
+                //         {
+                //             sb.AppendLine($"{i + 1}. {question.Options[i]}");
+                //         }
+                //     }
+                //     else
+                //     {
+                //         for (int i = 0; i < question.NumLines; i++)
+                //         {
+                //             sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
+                //         }
+                //     }
+                //     sb.AppendLine(new string('-', 40));  // Separator between questions
+                // }
+                File.WriteAllText(filePath, sb.ToString());
         }
         public void ExportToJsonFile(Exam exam, string filePath)
         {

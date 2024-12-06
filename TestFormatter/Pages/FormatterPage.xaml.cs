@@ -37,7 +37,7 @@ namespace TestFormatter.Pages
         
             InitializeComponent();
             //Set DataContext to bind the XAML to the currentExam object 
-            this.DataContext = currentExam; 
+            this.DataContext = currentExam;
 
             if(newExam == true)
             {
@@ -66,6 +66,19 @@ namespace TestFormatter.Pages
         }
 
 
+        private void UpdateQuestionNumbers()
+        {
+            for (int i = 0; i < currentExam.Questions.Count; i++)
+            {
+                currentExam.Questions[i].Number = i + 1; // Update the question's number
+            }
+
+            foreach (var control in QuestionsPanel.Children.OfType<QuestionControl>())
+            {
+                control.UpdateHeaderText(); // Assuming this updates the displayed number
+            }
+        }
+
         //Add Questions code
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
@@ -91,15 +104,21 @@ namespace TestFormatter.Pages
 
             // Create a new QuestionControl and initialize it
             var questionControl = new QuestionControl();
-            questionControl.Initialize(newQuestion);
+            questionControl.Initialize(newQuestion,
+                ParentFormatterPage = this);
 
             // Subscribe to the QuestionTypeChanged and QuestionDeleted events
             questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
             questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
 
+            // Subscribe to up and down arrow event
+            // questionControl.ArrowClicked += swap_questions;
+
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
 
+            // Update question numbers
+            UpdateQuestionNumbers();
         }
 
         //Event to handle when question type changes
@@ -118,6 +137,9 @@ namespace TestFormatter.Pages
         {
             // Remove the question from currentExam
             currentExam.DeleteQuestion(deletedQuestion);
+
+            // Update the UI to reflect the new order
+            UpdateQuestionNumbers();
         }
 
         //Go back to landing page
@@ -186,6 +208,98 @@ namespace TestFormatter.Pages
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void swap_questions(int currentIndex, bool up_arrow)
+        {
+            if (up_arrow)
+            {
+                Question tempQuestion = currentExam.Questions[currentIndex];
+                currentExam.Questions[currentIndex] = currentExam.Questions[currentIndex - 1];
+                currentExam.Questions[currentIndex - 1] = tempQuestion;
+            }
+            else
+            {
+                Question tempQuestion = currentExam.Questions[currentIndex + 1];
+                currentExam.Questions[currentIndex + 1] = currentExam.Questions[currentIndex];
+                currentExam.Questions[currentIndex] = tempQuestion;
+            }
+        }
+
+        private void ShuffleQuestionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var random = new Random();
+
+            // Shuffle the questions in the currentExam
+            var shuffledQuestions = currentExam.Questions.OrderBy(q => random.Next()).ToList();
+
+            // Update the question numbers in the shuffled list
+            for (int i = 0; i < shuffledQuestions.Count; i++)
+            {
+                shuffledQuestions[i].Number = i + 1; // Assuming question numbers start at 1
+            }
+
+            // Update the existing collection instead of reassigning
+            currentExam.Questions.Clear();
+            foreach (var question in shuffledQuestions)
+            {
+                currentExam.Questions.Add(question);
+            }
+
+            // Update the UI to reflect the new order
+            UpdateQuestionNumbers();
+
+            // Rearrange the QuestionControl objects in the QuestionsPanel
+            UpdateQuestionControlOrder();
+        }
+
+        private void UpdateQuestionControlOrder()
+        {
+            // Locate the Add Question button and temporarily store it
+            Button addQuestionButton = null;
+            foreach (var child in QuestionsPanel.Children)
+            {
+                if (child is Button button && button.Name == "AddQuestionButton")
+                {
+                    addQuestionButton = button;
+                    break;
+                }
+            }
+
+            // Remove the Add Question button if it exists
+            if (addQuestionButton != null)
+            {
+                QuestionsPanel.Children.Remove(addQuestionButton);
+            }
+
+            // Create a dictionary to map questions to their controls
+            var questionControlMap = QuestionsPanel.Children.OfType<QuestionControl>()
+                .ToDictionary(qc => qc.Question);
+
+            // Clear the QuestionsPanel but retain the existing QuestionControl objects
+            QuestionsPanel.Children.Clear();
+
+            // Add controls back in the new order
+            foreach (var question in currentExam.Questions)
+            {
+                if (questionControlMap.TryGetValue(question, out var questionControl))
+                {
+                    QuestionsPanel.Children.Add(questionControl);
+
+                    // Update the UI to reflect the new number
+                    questionControl.UpdateHeaderText();
+                }
+            }
+
+            // Re-add the Add Question button as the last element
+            if (addQuestionButton != null)
+            {
+                QuestionsPanel.Children.Add(addQuestionButton);
+            }
+
+
+            // Update both the question numbers and their headers
+            UpdateQuestionNumbers();
         }
 
     }
