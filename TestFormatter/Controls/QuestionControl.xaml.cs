@@ -141,40 +141,6 @@ namespace TestFormatter.Controls
             AdditionalOptionsPanel.Children.Add(optionPanel);
         }
 
-
-
-
-
-        public void update_on_load(string questionText = "", string questionType = "")
-        {
-            // foreach (ComboBoxItem item in QuestionTypeComboBox.Items)
-            // {
-            //     if (item.Content.ToString().Equals(questionType, StringComparison.OrdinalIgnoreCase))
-            //     {
-            //         QuestionTypeComboBox.SelectedItem = item;
-            //         break;
-            //     }
-            // }
-
-            QuestionTextBox.Text = questionText;
-            QuestionTextBox.Measure(new Size(QuestionTextBox.Width, double.PositiveInfinity));
-            double wrapAroundHeight = Math.Round((QuestionTextBox.ExtentHeight),0);
-            double textboxHeight = QuestionTextBox.Height;
-
-            // Check if the content overflows or wraps onto a new line
-            if (wrapAroundHeight > textboxHeight)
-            {
-                // Add padding only if a new line is needed
-                QuestionTextBox.Height = textboxHeight + 20;
-            }
-            else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 18))
-            {
-                QuestionTextBox.Height = textboxHeight - 20;
-
-            }
-            QuestionTextBox.UpdateLayout();
-        }
-
         private void UpdateHeaderText()
         {
             // Set HeaderText based on Question properties (e.g., number and type)
@@ -218,7 +184,6 @@ namespace TestFormatter.Controls
                 }
             }
         }
-
 
         //Question delete button logic
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
