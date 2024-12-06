@@ -30,7 +30,10 @@ namespace TestFormatter.Models
             }
             else if (newType == "Multiple Choice")
             {
-                Options = new List<string>(); // Initialize options for Multiple Choice
+                if (Options == null)
+                {
+                    Options = new List<string>(); // Initialize options for Multiple Choice
+                } 
             }
             else if (newType == "Matching")
             {

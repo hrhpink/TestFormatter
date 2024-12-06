@@ -77,7 +77,6 @@ namespace TestFormatter.Controls
                 // Populate the Options list and UI dynamically
                 foreach (var option in loadedQuestion.Options)
                 {
-                    Question.Options.Add(option); // Add to the backend list
                     AddOption(option); // Add to the UI
                 }
             }
@@ -243,15 +242,6 @@ namespace TestFormatter.Controls
                     };
                     addOptionButton.Click += AddOptionButton_Click;
                     AddOptionButton.Children.Add(addOptionButton);
-
-                    // Load existing options
-                    if (question.Options != null)
-                    {
-                        foreach (var option in question.Options)
-                        {
-                            AddOption(option);
-                        }
-                    }
                 }
                  ////////////
                 //Matching//
