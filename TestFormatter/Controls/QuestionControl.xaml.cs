@@ -143,7 +143,7 @@ namespace TestFormatter.Controls
             AdditionalOptionsPanel.Children.Add(optionPanel);
         }
 
-        private void UpdateHeaderText()
+        public void UpdateHeaderText()
         {
             // Set HeaderText based on Question properties (e.g., number and type)
             HeaderText = $"Question #{question.Number}: {question.Type}";

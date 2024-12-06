@@ -49,7 +49,11 @@ namespace TestFormatter.Pages
         {
             foreach (Question question in currentExam.Questions)
             {
-                var questionControl = new QuestionControl();
+                var questionControl = new QuestionControl
+                {
+                    Question = question,
+                    ParentFormatterPage = this
+                };
 
                 // Initialize the control with the question data
                 questionControl.Initialize(question);
@@ -64,7 +68,6 @@ namespace TestFormatter.Pages
                 QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
             }
         }
-
 
         private void UpdateQuestionNumbers()
         {
@@ -103,9 +106,11 @@ namespace TestFormatter.Pages
             currentExam.AddQuestion(newQuestion);
 
             // Create a new QuestionControl and initialize it
-            var questionControl = new QuestionControl();
-            questionControl.Initialize(newQuestion,
-                ParentFormatterPage = this);
+            var questionControl = new QuestionControl
+            {
+                Question = newQuestion,
+                ParentFormatterPage = this
+            };
 
             // Subscribe to the QuestionTypeChanged and QuestionDeleted events
             questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
@@ -197,7 +202,16 @@ namespace TestFormatter.Pages
                 string filePath = saveFileDialog.FileName;
 
                 // Assuming 'exam' is the instance of the Exam class in the current context
-                currentExam.ExportToPdf(saveFileDialog.FileName);
+                if(hasImages == true)
+                {
+                    currentExam.ExportToPdf(saveFileDialog.FileName);
+                }
+                else
+                {
+                    currentExam.ExportToTextFile(saveFileDialog.FileName);
+                }
+                    
+
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
