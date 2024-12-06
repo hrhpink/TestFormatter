@@ -67,7 +67,7 @@
                     <TextBlock Text="  " VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 </StackPanel>
                 <DockPanel HorizontalAlignment="Right">
-					<Button Content="Shuffle Questions" Click="ShuffleQuestionsButton_Click" />
+					<Button Content="Shuffle Questions" Width="100" Click="ShuffleQuestionsButton_Click" Margin="10"/>
                     <!--Save exam and return to it later-->
                     <Button Name="Save" Content="Save" Width="50" Click="Save_Click" Margin="10"/>
                     <!--Export exam to prefered format-->
