@@ -56,7 +56,7 @@ namespace TestFormatter.Controls
             }
         }
 
-        //TextBox logic so it adjust veritcal size based on user input
+        //TextBox logic so it adjust vertical size based on user input
         private void TextBoxAdjustment_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox textBox)

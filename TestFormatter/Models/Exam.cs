@@ -107,7 +107,8 @@ namespace TestFormatter.Models
             {
                 StringBuilder sb = new StringBuilder();
 
-                if (IncludeNameField == true)
+            #region HeaderElements
+            if (IncludeNameField == true)
                 {
                     sb.AppendLine($"Name: _____________________________");
                     sb.AppendLine("\n");
@@ -145,8 +146,9 @@ namespace TestFormatter.Models
                          sb.AppendLine("\n");
                     }
                 }
+            #endregion
 
-                for (int j = 0; j < Questions.Count; j++)
+            for (int j = 0; j < Questions.Count; j++)
                 {
                     Question question = Questions[j];
                     sb.AppendLine($"Question {question.Number}");
