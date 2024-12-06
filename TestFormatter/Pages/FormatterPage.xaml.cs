@@ -196,9 +196,8 @@ namespace TestFormatter.Pages
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
 
-                Filter = "Text File (*.txt)|*.txt",
                 Title = "Export Exam Questions",
-                FileName = currentExam.FileName
+                FileName = currentExam.FileName,
                 Filter = hasImages ? "PDF files (*.pdf)|*.pdf" : "Text files (*.txt)|*.txt"
 
             };
