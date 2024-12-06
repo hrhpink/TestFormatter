@@ -202,7 +202,24 @@ namespace TestFormatter.Models
                         yPosition += 20;
                     }
                 }
-                else
+                if(question.Type == "True/False")
+                {
+                    foreach(string statement in question.TrueOrFalse)
+                    {
+                        gfx.DrawString($"(True/False) {statement}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
+                        yPosition += 20;
+                    }
+                }
+                if (question.Type == "Matching")
+                {
+                    int maxLength = question.Matching.Item1.Max(word => word.Length);
+                    for (int i = 0; i < Math.Min(question.Matching.Item1.Count, question.Matching.Item2.Count); i++)
+                    {
+                        gfx.DrawString($"{question.Matching.Item1[i].PadRight(maxLength)}      {question.Matching.Item2[i]}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
+                        yPosition += 20;
+                    }
+                }
+                if (question.Type == "Free Response")
                 {
                     // Otherwise, display blank lines as placeholders
                     for (int i = 0; i < question.NumLines; i++)
@@ -217,7 +234,7 @@ namespace TestFormatter.Models
                 gfx.DrawString(new string('-', 40), font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
                 yPosition += 30; // Add space after the separator
 
-                // Check if we need to create a new page (if the content overflows)
+                // Check if we need to create a new page
                 if (yPosition > page.Height - 50)
                 {
                     page = document.AddPage();
@@ -272,32 +289,48 @@ namespace TestFormatter.Models
                 }
             }
 
-                for (int j = 0; j < Questions.Count; j++)
+            for (int j = 0; j < Questions.Count; j++)
+            {
+                Question question = Questions[j];
+                sb.AppendLine($"Question {question.Number}");
+                sb.AppendLine($"({question.Points} points) {question.QuestionText}");
+                if (question.Type == "Multiple Choice")
                 {
-                    Question question = Questions[j];
-                    sb.AppendLine($"Question {question.Number}");
-                    sb.AppendLine($"({question.Points} points) {question.QuestionText}");
-                    if (question.Type == "Multiple Choice")
+                    List<string> alphabet = new List<string>
                     {
-                        List<string> alphabet = new List<string>
-                        {
-                            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-                            "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-                        };
-                        for (int i = 0; i < question.Options.Count; i++)
-                        {
-                            sb.AppendLine($"{alphabet[i]}. {question.Options[i]}");
-                        }
-                    }
-                    else
+                        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                    };
+                    for (int i = 0; i < question.Options.Count; i++)
                     {
-                        for (int i = 0; i < question.NumLines; i++)
-                        {
-                            sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
-                        }
+                        sb.AppendLine($"{alphabet[i]}. {question.Options[i]}");
                     }
                 }
-                File.WriteAllText(filePath, sb.ToString());
+                if(question.Type == "True/False")
+                {
+                    foreach(string statement in question.TrueOrFalse)
+                    {
+                        sb.AppendLine($"(True/False) {statement}");
+                    }
+                }
+                if (question.Type == "Matching")
+                {
+                    int maxLength = question.Matching.Item1.Max(word => word.Length);
+                    for (int i = 0; i < Math.Min(question.Matching.Item1.Count, question.Matching.Item2.Count); i++)
+                    {
+                        sb.AppendLine($"{question.Matching.Item1[i].PadRight(maxLength)}      {question.Matching.Item2[i]}");
+                    }
+                }
+                if (question.Type == "Free Response")
+                {
+                    for (int i = 0; i < question.NumLines; i++)
+                    {
+                        sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
+                    }
+                }
+                sb.AppendLine(new string('-', 40));  // Separator between questions
+            }
+            File.WriteAllText(filePath, sb.ToString());
         }
         public void ExportToJsonFile(Exam exam, string filePath)
         {
