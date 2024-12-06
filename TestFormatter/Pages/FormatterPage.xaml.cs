@@ -99,9 +99,7 @@ namespace TestFormatter.Pages
             var newQuestion = new Question
             {
                 Type = "Free Response", // Default type
-                QuestionText = "",
-                Points = 1,
-                NumLines = 1 // Default number of lines for Free Response
+                QuestionText = ""
             };
             currentExam.AddQuestion(newQuestion);
 
