@@ -191,9 +191,14 @@ namespace TestFormatter.Models
                 // If the question is Multiple Choice, display the options
                 if (question.Type == "Multiple Choice")
                 {
+                    List<string> alphabet = new List<string>
+                    {
+                        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                    };
                     for (int i = 0; i < question.Options.Count; i++)
                     {
-                        gfx.DrawString($"{i + 1}. {question.Options[i]}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
+                        gfx.DrawString($"{alphabet[i]}. {question.Options[i]}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
                         yPosition += 20;
                     }
                 }
@@ -274,9 +279,14 @@ namespace TestFormatter.Models
                     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
                     if (question.Type == "Multiple Choice")
                     {
+                        List<string> alphabet = new List<string>
+                        {
+                            "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
+                            "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                        };
                         for (int i = 0; i < question.Options.Count; i++)
                         {
-                            sb.AppendLine($"{i + 1}. {question.Options[i]}");
+                            sb.AppendLine($"{alphabet[i]}. {question.Options[i]}");
                         }
                     }
                     else
@@ -287,26 +297,6 @@ namespace TestFormatter.Models
                         }
                     }
                 }
-                // foreach (var question in Questions)
-                // {
-                //     sb.AppendLine($"Question {question.Number}");
-                //     sb.AppendLine($"({question.Points} points) {question.QuestionText}");
-                //     if (question.Type == "Multiple Choice")
-                //     {
-                //         for (int i = 0; i < question.Options.Count; i++)
-                //         {
-                //             sb.AppendLine($"{i + 1}. {question.Options[i]}");
-                //         }
-                //     }
-                //     else
-                //     {
-                //         for (int i = 0; i < question.NumLines; i++)
-                //         {
-                //             sb.AppendLine("______________________________________________________________________________________");  // Placeholder line
-                //         }
-                //     }
-                //     sb.AppendLine(new string('-', 40));  // Separator between questions
-                // }
                 File.WriteAllText(filePath, sb.ToString());
         }
         public void ExportToJsonFile(Exam exam, string filePath)
