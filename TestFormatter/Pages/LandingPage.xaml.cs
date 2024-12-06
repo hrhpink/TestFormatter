@@ -13,6 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Text.Json;
+using TestFormatter.Models;
+using Microsoft.Win32;
+using TestFormatter.Controls;
 
 namespace TestFormatter.Pages
 {
@@ -34,26 +38,56 @@ namespace TestFormatter.Pages
             win2.ShowDialog();
        
             //Navigate to formatter
-            this.NavigationService.Navigate(new Uri("/Pages/FormatterPage.xaml", UriKind.Relative));
+            this.NavigationService.Navigate(new FormatterPage(new Exam()));
         }
 
         private void LoadExam_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = ".csv"; // Default extension
-            dialog.Filter = "Text documents (.csv)|*.csv"; // Filter files by extension
-
-            // Show open file dialog box
-           if (dialog.ShowDialog() == true)
+            // Create OpenFileDialog to select a JSON file
+            OpenFileDialog openFileDialog = new OpenFileDialog
             {
-                string filepath = dialog.FileName;
-                //TODO: store name in a place that program can access at runtime so that it can display it
-                //OR do this in FileNameInput.xaml.cs
-                var fileStream = dialog.OpenFile();
-                using (StreamReader sr = new StreamReader(fileStream)) { 
-                //TODO: parse csv file
-                }
+                Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                Title = "Select a Test File to Load"
+            };
 
+            // Show the dialog and get the selected file
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                try
+                {
+                    // Read the JSON file
+                    string jsonContent = File.ReadAllText(filePath);
+                    // Deserialize JSON into ExamWrapper object
+                    ExamJsonWrapper examJson = JsonSerializer.Deserialize<ExamJsonWrapper>(jsonContent);
+                    
+                    if (examJson != null)
+                    {
+                        Exam loadedExam = new Exam(examJson.Questions)
+                        {
+                            IncludeNameField = examJson.IncludeNameField,
+                            IncludeIDField = examJson.IncludeIDField,
+                            IncludeDateField = examJson.IncludeDateField,
+                            IncludeClassField = examJson.IncludeClassField,
+                            IncludeSectionField = examJson.IncludeSectionField,
+                            IncludeGradeField = examJson.IncludeGradeField,
+                            QuestionLimit = examJson.QuestionLimit,
+                            NumberOfPoints = examJson.NumberOfPoints
+                        };
+
+                        // Navigate to formatter
+                        this.NavigationService.Navigate(new FormatterPage(loadedExam, true));
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to load test. The file might be empty or invalid.", "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle any errors that occur during the process
+                    MessageBox.Show($"An error occurred while loading the file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
     }
