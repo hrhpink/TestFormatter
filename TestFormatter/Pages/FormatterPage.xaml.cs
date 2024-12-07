@@ -18,6 +18,9 @@ using Microsoft.Win32;
 using System.IO;
 using System.ComponentModel;
 using TestFormatter.Windows;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using System.Diagnostics;
 
 namespace TestFormatter.Pages
 {
@@ -27,15 +30,47 @@ namespace TestFormatter.Pages
     public partial class FormatterPage : Page
     {
         //Initialization of Exam class to hold questions
-        private Exam currentExam = new Exam();
+        private Exam currentExam;
 
-        public FormatterPage()
+        public FormatterPage(Exam exam = null, bool newExam = false) 
         {
+            currentExam = exam;
+        
             InitializeComponent();
-
             //Set DataContext to bind the XAML to the currentExam object 
             this.DataContext = currentExam;
+            
             currentExam.FileName = LandingPage.FileName;
+
+
+            if(newExam == true)
+            {
+                manual_load_questions();
+            }
+        }
+
+        public void manual_load_questions()
+        {
+            foreach (Question question in currentExam.Questions)
+            {
+                var questionControl = new QuestionControl
+                {
+                    Question = question,
+                    ParentFormatterPage = this
+                };
+
+                // Initialize the control with the question data
+                questionControl.Initialize(question);
+
+                // Subscribe to the QuestionTypeChanged event
+                questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
+
+                // Subscribe to the QuestionDeleted event
+                questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
+
+                // Add the new QuestionControl to the Question Panel
+                QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
+            }
         }
 
         private void UpdateQuestionNumbers()
@@ -64,21 +99,23 @@ namespace TestFormatter.Pages
                 return; // Exit without adding a new question
             }
 
-            // Create a new FreeResponseQuestion by default
-            var newQuestion = new Question();
+            // Create a new Free Response Question by default
+            var newQuestion = new Question
+            {
+                Type = "Free Response", // Default type
+                QuestionText = ""
+            };
             currentExam.AddQuestion(newQuestion);
 
-            // Create a new instance of QuestionControl and set its Question property
+            // Create a new QuestionControl and initialize it
             var questionControl = new QuestionControl
             {
                 Question = newQuestion,
                 ParentFormatterPage = this
             };
 
-            // Subscribe to the QuestionTypeChanged event
+            // Subscribe to the QuestionTypeChanged and QuestionDeleted events
             questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
-
-            // Subscribe to the QuestionDeleted event
             questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
 
             // Subscribe to up and down arrow event
@@ -153,21 +190,39 @@ namespace TestFormatter.Pages
                 MessageBox.Show(validationMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
+            
+            bool hasImages = currentExam.Questions.Any(q => q.QuestionImage != null);
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "Text File (*.txt)|*.txt",
+
                 Title = "Export Exam Questions",
-                FileName = currentExam.FileName
+                FileName = currentExam.FileName,
+                Filter = hasImages ? "PDF files (*.pdf)|*.pdf" : "Text files (*.txt)|*.txt"
+
             };
+
+            // Show the SaveFileDialog and check if the user selected a file
             if (saveFileDialog.ShowDialog() == true)
             {
-                // Assuming 'exam' is an instance of your Exam class
-                currentExam.ExportToTextFile(saveFileDialog.FileName);
+                // Get the file path selected by the user
+                string filePath = saveFileDialog.FileName;
+
+                // Assuming 'exam' is the instance of the Exam class in the current context
+                if(hasImages == true)
+                {
+                    currentExam.ExportToPdf(saveFileDialog.FileName);
+                }
+                else
+                {
+                    currentExam.ExportToTextFile(saveFileDialog.FileName);
+                }
+                    
+
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
-
+        
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
 
