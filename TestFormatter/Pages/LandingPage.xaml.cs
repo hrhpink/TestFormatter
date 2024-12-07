@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Interaction logic for LandingPage
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,16 +21,15 @@ using TestFormatter.Controls;
 
 namespace TestFormatter.Pages
 {
-    /// <summary>
-    /// Interaction logic for LandingPage.xaml
-    /// </summary>
     public partial class LandingPage : Page
     {
+        //Default constructor
         public LandingPage()
         {
             InitializeComponent();
         }
 
+        //Prompts user to enter exam name before navigating to formatter imterface
         private void CreateExam_Click(object sender, RoutedEventArgs e)
         {
 
@@ -41,6 +41,7 @@ namespace TestFormatter.Pages
             this.NavigationService.Navigate(new FormatterPage(new Exam()));
         }
 
+        //Opens file dialog for user to attach saved exam
         private void LoadExam_Click(object sender, RoutedEventArgs e)
         {
             // Create OpenFileDialog to select a JSON file
@@ -90,7 +91,6 @@ namespace TestFormatter.Pages
                 }
             }
         }
-
-        public static string FileName = "";
+        public static string FileName = ""; //Stores submitted file name when user creates exam. Empty by default.
     }
 }

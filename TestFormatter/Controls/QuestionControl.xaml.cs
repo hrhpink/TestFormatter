@@ -14,6 +14,13 @@ namespace TestFormatter.Controls
 {
     public partial class QuestionControl : UserControl, INotifyPropertyChanged
     {
+        //Default constructor
+        public QuestionControl()
+        {
+            InitializeComponent();
+            DataContext = this;
+        }
+
         private Question question;
         public Question Question
         {
@@ -26,20 +33,14 @@ namespace TestFormatter.Controls
             }
         }
 
-        //Header text property
-        public string HeaderText { get; private set; } // Property for the header
+        public string HeaderText { get; private set; } // Property for the header text (ex. Question 1, Question 2)
         public FormatterPage? ParentFormatterPage { get; set; }
 
-        //Even handler so FormatterPage can modify Test class properly when big changes are done to the question (type change / deletion / Num change)
+        //Even handler so FormatterPage can modify Test class properly when changes are done to the question like switching the type, order, or deleting
         public event EventHandler<Question> QuestionTypeChanged;
         public event EventHandler<Question> QuestionDeleted;
 
-        public QuestionControl()
-        {
-            InitializeComponent();
-            DataContext = this;
-        }
-
+        //When a test is loaded from a save file, initialize the question container to display saved question elements
         public void Initialize(Question loadedQuestion)
         {
             // Set the Question property
@@ -83,16 +84,18 @@ namespace TestFormatter.Controls
             else if (loadedQuestion.Type == "Matching" && loadedQuestion.Matching != null)
             {
                 var (questions, options) = loadedQuestion.Matching;
-                // Populate matching fields
+                // TODO: Populate matching fields
             }
             else if (loadedQuestion.Type == "True/False" && loadedQuestion.TrueOrFalse != null)
             {
-                // Populate True/False fields
+                // TODO: Populate True/False fields
             }
         }
 
+        //Adds additional option to Multiple Choice question
         private void AddOption(string optionText)
         {
+            //Create primary container for option
             StackPanel optionPanel = new StackPanel
             {
                 Orientation = Orientation.Horizontal,
@@ -100,6 +103,7 @@ namespace TestFormatter.Controls
                 Margin = new Thickness(106, 0, 5, 5)
             };
 
+            //Create TextBox that will store option text
             TextBox optionTextBox = new TextBox
             {
                 Height = 25,
@@ -110,7 +114,7 @@ namespace TestFormatter.Controls
                 Text = optionText // Prepopulate with the option text
             };
 
-            // Update the Options list when the text changes
+            //Add option to the list of multiple choice options (strings) stored in code behind
             optionTextBox.LostFocus += (s, args) =>
             {
                 int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
@@ -120,11 +124,14 @@ namespace TestFormatter.Controls
                 }
             };
 
+            //Design for the delete button that allows user to delete multiple choice options
             Button deleteButton = new Button
             {
                 Content = "❌",
                 Margin = new Thickness(5)
             };
+
+            //Click event for delete button that actually removes the option from both the UI and the list in code behind
             deleteButton.Click += (s, args) =>
             {
                 int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
@@ -136,15 +143,15 @@ namespace TestFormatter.Controls
                 }
             };
 
+            //Adds textbox and delete button to the container for the individual option and then adds it to the container for all options
             optionPanel.Children.Add(optionTextBox);
             optionPanel.Children.Add(deleteButton);
-
             AdditionalOptionsPanel.Children.Add(optionPanel);
         }
 
+        //Updates the header of a question to reflect its number and type
         public void UpdateHeaderText()
         {
-            // Set HeaderText based on Question properties (e.g., number and type)
             HeaderText = $"Question #{question.Number}: {question.Type}";
             OnPropertyChanged(nameof(HeaderText)); // Notify the UI of the update
         }
@@ -159,7 +166,7 @@ namespace TestFormatter.Controls
             }
         }
 
-        //TextBox logic so it adjust veritcal size based on user input
+        //TextBox logic so it adjusts the vertical size based on user input
         private void TextBoxAdjustment_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox textBox)
@@ -180,6 +187,7 @@ namespace TestFormatter.Controls
                 }
                 else if ((wrapAroundHeight + 5 < textboxHeight) && (textboxHeight-wrapAroundHeight > 18))
                 {
+                    //Decrease textbox height if the user deletes text and moves back to a previous line
                   textBox.Height = textboxHeight - 20;
 
                 }
@@ -200,6 +208,8 @@ namespace TestFormatter.Controls
             if (result == MessageBoxResult.Yes)
             {
                 var parent = this.Parent as Panel;
+
+                //Remove question from list
                 if (parent != null)
                 {
                     parent.Children.Remove(this);
@@ -234,12 +244,15 @@ namespace TestFormatter.Controls
                     QuestionTextBlock.FontSize = 12;
                     QuestionTextBlock.Text = "Enter Question:";
 
+                    //Create button for adding more MC options
                     Button addOptionButton = new Button
                     {
                         Content = " Add Option ",
                         HorizontalAlignment = HorizontalAlignment.Center,
                         Margin = new Thickness(5, 0, 5, 0)
                     };
+
+                    //Click event for add option button
                     addOptionButton.Click += AddOptionButton_Click;
                     AddOptionButton.Children.Add(addOptionButton);
                 }
@@ -252,6 +265,7 @@ namespace TestFormatter.Controls
                     QuestionTextBlock.FontSize = 12;
                     QuestionTextBlock.Text = "Enter Instructions:";
 
+                    //Create container for matching elements
                     StackPanel matchingPanel = new StackPanel()
                     {
                         Orientation = Orientation.Horizontal,
@@ -363,6 +377,7 @@ namespace TestFormatter.Controls
                     QuestionTextBlock.FontSize = 12;
                     QuestionTextBlock.Text = "Enter Question:";
 
+                    //Create container for number of lines input
                     StackPanel linePanel = new StackPanel()
                     {
                         Orientation = Orientation.Horizontal,
@@ -378,6 +393,7 @@ namespace TestFormatter.Controls
                         //Margin= new Thickness(5, 0, 0, 0)
 
                     };
+                    //Create input box for number of lines
                     TextBox lineTextBox = new TextBox
                     {
                         Width = 40,
@@ -470,7 +486,6 @@ namespace TestFormatter.Controls
             }
         }
 
-
         //Logic for AddOption button for multiple choice questions
         private void AddOptionButton_Click(object sender, RoutedEventArgs e)
         {
@@ -495,6 +510,7 @@ namespace TestFormatter.Controls
                 //TextChanged event for dynamic height adjustment
                 optionTextBox.TextChanged += TextBoxAdjustment_TextChanged;
 
+                //Add option to list in code behind once focus is lost
                 optionTextBox.LostFocus += (s, args) =>
                 {
                     int index = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
@@ -513,6 +529,8 @@ namespace TestFormatter.Controls
                     Content = "❌",
                     Margin = new Thickness(5)
                 };
+
+                //Click event for deleting an option from code behind and UI
                 deleteButton.Click += (s, args) =>
                 {
                     int positionOfOption = AdditionalOptionsPanel.Children.IndexOf(optionPanel);
@@ -531,11 +549,14 @@ namespace TestFormatter.Controls
                 optionTextBox.Focus();
             }
         }
+
+        //Make image container visible if checkbox for AddImage is clicked
         private void AddImageCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             AddPicture.Visibility = Visibility.Visible;
         }
 
+        //Click event that adds image to the UI when user attaches it
         private void AddPicture_Click(object sender, RoutedEventArgs e)
         {
             // Open file dialog to select an image
@@ -553,21 +574,24 @@ namespace TestFormatter.Controls
                 QuestionImageControl.Visibility = Visibility.Visible;
             }
         }
+
+        //Click event that removes image from question if the checkbox is unchecked
         private void AddImageCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            // Remove the image if the checkbox is unchecked
             question.QuestionImage = null;
             QuestionImageControl.Source = null;
             QuestionImageControl.Visibility = Visibility.Collapsed;
             AddPicture.Visibility = Visibility.Collapsed;
         }
 
+        //Event handlers for when a property is changed
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //Click event for the up arrow on each question that changes their order in UI and code behind
         private void UpArrowButton_Click(object sender, RoutedEventArgs e)
         {
             var parentPanel = this.Parent as Panel;
@@ -597,6 +621,8 @@ namespace TestFormatter.Controls
                 }
             }
         }
+
+        //Click event for the down arrow on each question that changes their order in UI and code behind
         private void DownArrowButton_Click(object sender, RoutedEventArgs e)
         {
             var parentPanel = this.Parent as Panel;
@@ -627,5 +653,4 @@ namespace TestFormatter.Controls
             }
         }
     }
-
 }

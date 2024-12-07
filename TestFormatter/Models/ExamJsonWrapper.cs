@@ -1,3 +1,4 @@
+//Allows test to be imported from json file
 namespace TestFormatter.Models
 {
     public class ExamJsonWrapper
