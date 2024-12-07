@@ -1,4 +1,16 @@
-﻿using System;
+﻿//Code behind for the main exam formatting page. Includes:
+//Functions for updating UI when exam is imported
+//Updating question numbers on the back end
+//Adding new question and checking if it exceeds question limit
+//Question type changed
+//Question deleted
+//Go back to previous page
+//Save exam
+//Export exam
+//Swap question order with arrows
+//Shuffle order of questions
+//Updating UI when above changes occur
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,9 +36,6 @@ using System.Diagnostics;
 
 namespace TestFormatter.Pages
 {
-    /// <summary>
-    /// Interaction logic for FormatterPage.xaml
-    /// </summary>
     public partial class FormatterPage : Page
     {
         //Initialization of Exam class to hold questions
@@ -49,6 +58,7 @@ namespace TestFormatter.Pages
             }
         }
 
+        //Manually load in questions when exam is imported
         public void manual_load_questions()
         {
             foreach (Question question in currentExam.Questions)
@@ -73,6 +83,7 @@ namespace TestFormatter.Pages
             }
         }
 
+        //Update question numbers when order changed
         private void UpdateQuestionNumbers()
         {
             for (int i = 0; i < currentExam.Questions.Count; i++)
@@ -86,10 +97,10 @@ namespace TestFormatter.Pages
             }
         }
 
-        //Add Questions code
+        //Add Question to exam
         private void AddQuestionButton_Click(object sender, RoutedEventArgs e)
         {
-
+            //If newly added question exceeds count for max number of questions specified in options, do not add question
             if (currentExam.QuestionLimit > 0 && currentExam.Questions.Count >= currentExam.QuestionLimit)
             {
                 MessageBox.Show($"You have reached the maximum number of questions ({currentExam.QuestionLimit}).",
@@ -117,9 +128,6 @@ namespace TestFormatter.Pages
             // Subscribe to the QuestionTypeChanged and QuestionDeleted events
             questionControl.QuestionTypeChanged += QuestionControl_QuestionTypeChanged;
             questionControl.QuestionDeleted += QuestionControl_QuestionDeleted;
-
-            // Subscribe to up and down arrow event
-            // questionControl.ArrowClicked += swap_questions;
 
             // Add the new QuestionControl to the Question Panel
             QuestionsPanel.Children.Insert(QuestionsPanel.Children.Count - 1, questionControl);
@@ -155,6 +163,7 @@ namespace TestFormatter.Pages
             this.NavigationService.GoBack();
         }
 
+        //Save exam into .json for later editing
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             string validationMessage;
@@ -180,11 +189,12 @@ namespace TestFormatter.Pages
             }
         }
 
+        //Export exam to .pdf or .txt
         private void Export_Click(object sender, RoutedEventArgs e)
         {
             string validationMessage;
 
-            // Assuming 'exam' is an instance of your Exam class
+            //If validation fails, display error message
             if (!currentExam.ValidateQuestions(out validationMessage))
             {
                 MessageBox.Show(validationMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -193,6 +203,7 @@ namespace TestFormatter.Pages
             
             bool hasImages = currentExam.Questions.Any(q => q.QuestionImage != null);
 
+            //opens file dialog for exporting exam
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
 
@@ -218,7 +229,6 @@ namespace TestFormatter.Pages
                     currentExam.ExportToTextFile(saveFileDialog.FileName);
                 }
                     
-
                 MessageBox.Show("Questions exported successfully.", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
@@ -231,6 +241,7 @@ namespace TestFormatter.Pages
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //Swaps question order in code behind when UpArrow or DownArrow is clicked
         public void swap_questions(int currentIndex, bool up_arrow)
         {
             if (up_arrow)
@@ -247,6 +258,7 @@ namespace TestFormatter.Pages
             }
         }
 
+        //Shuffles question order in code behind
         private void ShuffleQuestionsButton_Click(object sender, RoutedEventArgs e)
         {
             var random = new Random();
@@ -274,6 +286,7 @@ namespace TestFormatter.Pages
             UpdateQuestionControlOrder();
         }
 
+        //Updates question order in UI
         private void UpdateQuestionControlOrder()
         {
             // Locate the Add Question button and temporarily store it
@@ -318,10 +331,8 @@ namespace TestFormatter.Pages
                 QuestionsPanel.Children.Add(addQuestionButton);
             }
 
-
             // Update both the question numbers and their headers
             UpdateQuestionNumbers();
         }
-
     }
 }

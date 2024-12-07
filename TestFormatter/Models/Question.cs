@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Contains data associated with each added question to the exam
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace TestFormatter.Models
         public string Type { get; set; }
         public List<string> Options { get; set; } // Only used for Multiple Choice
         public BitmapImage QuestionImage { get; set; } // Property to store the image associated with the question
-        public Tuple<List<string>,List<string>> Matching {  get; set; } // Only used for Mathcing
+        public Tuple<List<string>,List<string>> Matching {  get; set; } // Only used for Matching
         public List<string> TrueOrFalse { get; set; }
 
 

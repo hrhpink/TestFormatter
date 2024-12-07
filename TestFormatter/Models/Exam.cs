@@ -1,4 +1,12 @@
-﻿using System;
+﻿//Main exam class
+//Includes:
+//List that stores all questions
+//Options for the exam
+//Functions for adding/deleting a question
+//Question validation functions
+//Export functionality for .pdf and .txt
+//Save functionality for .json
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,8 +22,10 @@ namespace TestFormatter.Models
 {
     public class Exam : INotifyPropertyChanged
     {
+        //Contains all questions in the exam
         public List<Question> Questions { get; private set; } = new List<Question>();
 
+        //All options for an exam that are set when the user interacts with options panel. Can be loaded in via saved .json file
         public bool IncludeNameField { get; set; }
         public bool IncludeIDField { get; set; }
         public bool IncludeDateField { get; set; }
@@ -35,30 +45,36 @@ namespace TestFormatter.Models
             }
         }
 
+        //Adds question to exam
         public void AddQuestion(Question question)
         {
             Questions.Add(question);
             OnPropertyChanged(nameof(QuestionCount));
         }
 
+        //Deletes question from exam
         public void DeleteQuestion(Question question)
         {
             Questions.Remove(question);
             OnPropertyChanged(nameof(QuestionCount));
         }
 
+        //Validation check for questions
         public bool ValidateQuestions(out string validationMessage)
         {
             double sumOfPoints = 0;
+
             for (int i = 0; i < Questions.Count; i++)
             {
                 Question question = Questions[i];
                 sumOfPoints += question.Points;
+                //Checks for missing question text
                 if (question.QuestionText == null)
                 {
                     validationMessage = $"One or more of your questions are missing the question text.";
                     return false;
                 }
+                //Checks that the points fields were filled for each question
                 else if (question.Points <= 0)
                 {
                     validationMessage = $"Make sure all questions have points assigned.";
@@ -72,6 +88,7 @@ namespace TestFormatter.Models
                         validationMessage = $"Question {i+1} is multiple choice but has no options.";
                         return false;
                     }
+                    //Checks that added MC options are filled
                     else
                     {
                         foreach (var option in question.Options)
@@ -94,6 +111,7 @@ namespace TestFormatter.Models
                     }
                 }
             }
+            //Checks that the point total specified under options is equal to the sum of all points listed for the individual questions
             if (NumberOfPoints != sumOfPoints)
             {
                 validationMessage = $"The \"Total Points\" field does not match the sum of the question point values.";
@@ -104,6 +122,7 @@ namespace TestFormatter.Models
             return true;
         }
 
+        //Exports exam to pdf if images are included
         public void ExportToPdf(string filePath)
         {
             // Create a new PDF document
@@ -166,6 +185,7 @@ namespace TestFormatter.Models
                 gfx.DrawString($"({question.Points} points) {question.QuestionText}", font, XBrushes.Black, new XRect(20, yPosition, page.Width, 0));
                 yPosition += 20;
                 
+                //Adds question image
                 if (question.QuestionImage != null)
                 {
                     // Load and get the image
@@ -188,28 +208,34 @@ namespace TestFormatter.Models
                     // Update the yPosition after the image
                     yPosition += scaledHeight + 20; // Adjust for the next content
                 }
+
                 // If the question is Multiple Choice, display the options
                 if (question.Type == "Multiple Choice")
                 {
+                    //Creates alphabet that is cycled through as starters for each multiple choice option
                     List<string> alphabet = new List<string>
                     {
-                        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-                        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                        "m", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
                     };
+                    //Prints one letter per multiple choice option
                     for (int i = 0; i < question.Options.Count; i++)
                     {
                         gfx.DrawString($"{alphabet[i]}. {question.Options[i]}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
                         yPosition += 20;
                     }
                 }
+                //If question is True False, print each line that was listed in the True False box.
                 if(question.Type == "True/False")
                 {
+                    //Add True/False to start of each statement
                     foreach(string statement in question.TrueOrFalse)
                     {
                         gfx.DrawString($"(True/False) {statement}", font, XBrushes.Black, new XRect(40, yPosition, page.Width, 0));
                         yPosition += 20;
                     }
                 }
+                //If question is Matching, print questions column and options column
                 if (question.Type == "Matching")
                 {
                     int maxLength = question.Matching.Item1.Max(word => word.Length);
@@ -219,6 +245,7 @@ namespace TestFormatter.Models
                         yPosition += 20;
                     }
                 }
+                //If question is Free Response, print number of lines
                 if (question.Type == "Free Response")
                 {
                     // Otherwise, display blank lines as placeholders
@@ -246,6 +273,8 @@ namespace TestFormatter.Models
             // Save the document to the file path chosen by the user
             document.Save(filePath);
         }        
+
+        //Exports exam to txt file if no images are added
         public void ExportToTextFile(string filePath)
         {
             StringBuilder sb = new StringBuilder();
@@ -294,18 +323,20 @@ namespace TestFormatter.Models
                 Question question = Questions[j];
                 sb.AppendLine($"Question {question.Number}");
                 sb.AppendLine($"({question.Points} points) {question.QuestionText}");
+                //Multiple choice question type
                 if (question.Type == "Multiple Choice")
                 {
                     List<string> alphabet = new List<string>
                     {
-                        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M",
-                        "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+                        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+                        "m", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
                     };
                     for (int i = 0; i < question.Options.Count; i++)
                     {
                         sb.AppendLine($"{alphabet[i]}. {question.Options[i]}");
                     }
                 }
+                //True False question type
                 if(question.Type == "True/False")
                 {
                     foreach(string statement in question.TrueOrFalse)
@@ -313,6 +344,7 @@ namespace TestFormatter.Models
                         sb.AppendLine($"(True/False) {statement}");
                     }
                 }
+                //Matching question type
                 if (question.Type == "Matching")
                 {
                     int maxLength = question.Matching.Item1.Max(word => word.Length);
@@ -321,6 +353,7 @@ namespace TestFormatter.Models
                         sb.AppendLine($"{question.Matching.Item1[i].PadRight(maxLength)}      {question.Matching.Item2[i]}");
                     }
                 }
+                //Free response question type
                 if (question.Type == "Free Response")
                 {
                     for (int i = 0; i < question.NumLines; i++)
@@ -332,6 +365,8 @@ namespace TestFormatter.Models
             }
             File.WriteAllText(filePath, sb.ToString());
         }
+
+        //If user clicks the save button, export exam data to a json file
         public void ExportToJsonFile(Exam exam, string filePath)
         {
             string jsonContent = JsonSerializer.Serialize(exam, new JsonSerializerOptions

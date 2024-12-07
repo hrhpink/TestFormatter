@@ -1,4 +1,5 @@
-﻿<Page x:Class="TestFormatter.Pages.LandingPage"
+﻿<!--The first page that appears when a user loads the program-->
+    <Page x:Class="TestFormatter.Pages.LandingPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -7,8 +8,10 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LandingPage" Background="AliceBlue">
+    <!--Design container-->
     <Grid>
         <StackPanel VerticalAlignment="Center">
+            <!--Container for logo, title, subtitle-->
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Image Width="100" Height="100" Source="/Media/498icon.png"/>
                 <StackPanel VerticalAlignment="Center">
@@ -18,13 +21,12 @@
             </StackPanel>
             <TextBlock Text="Authors: Daniel Alvarado Segura, Joshna Kurra, Natalie O'Leary, Tharanie Subramaniam" Margin="10 10 10 0" FontSize="12"/>
             <TextBlock Text="Create a new exam: Start a new exam from scratch.&#10;Load previous exam: Continue working on a previous save file." FontSize="15" Margin="10"/>
-            <!--<TextBlock Text="Please select an option below:" FontSize="20" Margin="10"/>-->
             <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Center">
+                <!--Prompts user to enter exam name before switching to main interface for exam design-->
                 <Button Name="CreateExam" Content="Create a new exam" Width="220" FontSize ="25" Margin="0 0 10 0" Click="CreateExam_Click"/>
+                <!--Opens file dialog for user to open a previous save file-->
                 <Button Name="LoadExam" Content="Load previous exam" Width="230" FontSize="25" Click="LoadExam_Click"/>
             </StackPanel>
-            <!--<TextBlock Text="Copyright Notice: Blah blah blah" Margin="10"/>-->
         </StackPanel>
     </Grid>
-
 </Page>

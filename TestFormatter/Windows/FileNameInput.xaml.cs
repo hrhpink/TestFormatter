@@ -1,4 +1,5 @@
-﻿using System;
+﻿//Interaction logic for file name input box
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,13 +17,6 @@ using TestFormatter.Pages;
 
 namespace TestFormatter.Windows
 {
-    /// <summary>
-    /// Interaction logic for FileNameInput.xaml
-    /// </summary>
-    /// 
-
-
-
     public partial class FileNameInput : Window
     {
         public FileNameInput()
@@ -32,6 +26,8 @@ namespace TestFormatter.Windows
         }
 
         private string fileNameInputText = "";
+
+        //Sets user input to variable
         public string FileNameInputText
         {
             get { return fileNameInputText; }
@@ -40,9 +36,9 @@ namespace TestFormatter.Windows
             }
         }
 
-
         private void ConfirmName_Click(object sender, RoutedEventArgs e)
         {
+            //Stores file name input for later use when exporting exam
             TestFormatter.Pages.LandingPage.FileName = FileNameInputText;
             this.Close();
         }
