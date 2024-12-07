@@ -15,7 +15,7 @@ There are multiple ways to run the application:
 1. Utilize Visual Studio Enterprise with .NET Desktop Developent package, open a copy of our codebase, and compile it.
    - Follow Steps in "Steps to Install Visual Studio Enterprise" if interested in this step.)
 
-2. Download Test Formatter Executable folder in repository and run executable file within it.
+2. Download Final Test Formatter Executable folder in repository and run executable file within it.
 3. Utilize your coding enviroment of choice with .NET Desktop Development package or equivalent to compile and run application. 
 
 
